@@ -23,7 +23,7 @@ namespace HosApi.Controllers;
             // inner join patient p on p.hn  = i.hn
             // where i.vstdate= DATE(NOW()) and i.oqueue = '2284'
             var x = _para;
-            if (x.Length <= 4)
+            if (x.Length == 4)
             {
                 var query1 = 
                 from a in db.Ovsts
@@ -35,17 +35,21 @@ namespace HosApi.Controllers;
                 };
                 return Json(query1.Take(50));
             }
-            else
+            else if (x.Length == 7)
             {
                 var query2 = 
                 from a in db.Ovsts
-                join b in db.Patients on  a.Hn equals b.Hn
-                where a.Vstdate == dateOnly && a.Hn == _para 
+                join b in db.Patients on a.Hn equals b.Hn  
+                where a.Hn == _para 
                 select new
                 {
-                    b.Pname, b.Fname, b.Lname,a.Vstdate
+                    b.Pname, b.Fname, b.Lname
                 };
-                return Json(query2.Take(50));
+                return Json(query2.First());
+            }
+            else
+            {
+                return NotFound("patient not found");
             }
             
         }
