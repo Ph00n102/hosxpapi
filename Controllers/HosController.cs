@@ -24,7 +24,7 @@ namespace HosApi.Controllers;
             // inner join patient p on p.hn  = i.hn
             // where i.vstdate= DATE(NOW()) and i.oqueue = '2284'
             var x = _para;
-            if (x.Length == 4)
+            if (x.Length <= 4)
             {
                 var query1 = 
                 from a in db.Ovsts
