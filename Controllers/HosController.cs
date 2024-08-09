@@ -1,3 +1,4 @@
+using System.Net;
 using System.Runtime.CompilerServices;
 using hosxpapi.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +50,7 @@ namespace HosApi.Controllers;
             }
             else
             {
-                return NotFound("patient not found");
+                return StatusCode(200, "patient not found");
             }
             
         }
