@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace hosxpapi.Models;
 
-public partial class Ovst
+public  class Ovst
 {
     public string HosGuid { get; set; } = null!;
 

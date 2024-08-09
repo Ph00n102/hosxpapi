@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using hosxpapi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,25 +14,42 @@ namespace HosApi.Controllers;
             this.db = db;
         }
 
+
+                [HttpGet]       
+                public IActionResult getost(string _para)
+                {
+                          DateOnly dateOnly = DateOnly.FromDateTime(DateTime.Now);
+                            // select i.hn,i.vstdate,p.pname,p.fname,p.lname from ovst i
+                            // inner join patient p on p.hn  = i.hn
+                            // where i.vstdate= DATE(NOW()) and i.oqueue = '2284'
+                            var query = 
+                            from a in db.Ovsts
+                            join b in db.Patients on  a.Hn equals b.Hn
+                            where a.Vstdate == dateOnly &&
+                            Convert.ToString( a.Oqueue ) == _para 
+                            select new{
+                                a.Hn, b.Pname, b.Fname, b.Lname,
+                                a.Vstdate
+                            };
+                            return Json(query.Take(50));
+                }
+      
          [HttpGet]
-        public IActionResult getdb (string paraHN)
+        public IActionResult getHosdb (string paraHN)
         { 
-            //  var query = Ovst  Patient
-            // from a in db.Wards
             var query =
             from a in db.Patients
-            join b in db.Ovsts on a.Hn equals b.Hn 
-            // join c in db.Wards  on b.Oldcode equals c.OldCode 
+            join b in db.Ovsts on a.Hn equals b.Hn  
+
             where a.Hn == paraHN 
-            orderby a.Hn ascending
+            // group a by a.Hn  into newGroup
             select new
             {
-                a.Hn,
+                b.Hn,
                 a.Cid,
                 a.Pname,
                 a.Fname,
-                a.Lname,
-                b.Doctor
+                a.Lname
                 // c.Name,
                 // c.OldCode
             };
