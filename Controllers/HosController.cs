@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 namespace HosApi.Controllers;
 
 [Route("/api/[controller]/[action]")]
-    public class LabController : Controller
+    public class HosController : Controller
     {
         private readonly ApplicationDbContext db;
-        public LabController(ApplicationDbContext db)
+        public HosController(ApplicationDbContext db)
         {
             this.db = db;
         }
