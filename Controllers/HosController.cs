@@ -12,7 +12,33 @@ namespace HosApi.Controllers;
         {
             this.db = db;
         }
-
+        [HttpGet]
+        public IActionResult Get()
+        {
+            var query =
+            from a in db.Wards
+            select new
+            {
+                a.Ward1,
+                a.Name,
+                a.OldCode,
+                a.Spclty,
+                a.Bedcount,
+                a.Shortname,
+                a.SssCode,
+                a.HosGuid,
+                a.NameOldSk,
+                a.ShortName1,
+                a.WardExportCode,
+                a.ShortNameBarcode,
+                a.WardActive,
+                a.IpdRxShiftTypeId,
+                a.SelectBednoFromLayout,
+                a.IpKey,
+                a.StrictAccess
+            };
+            return Json(query.Take(50));
+        } 
          [HttpGet]
         public IActionResult getHos (string paraHN)
         { 
@@ -34,7 +60,7 @@ namespace HosApi.Controllers;
                         // c.Name,
                         // c.OldCode
                     };
-                    return Json(queryHN.Take(50));
+                    return Json(queryHN.First());
                     
                 }
                 DateOnly dateNow = DateOnly.FromDateTime(DateTime.Now);
@@ -74,4 +100,6 @@ namespace HosApi.Controllers;
             };
             return Json(query.Take(50));
         }
+        
+        
     }
