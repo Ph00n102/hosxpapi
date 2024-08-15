@@ -44,9 +44,9 @@ namespace HosApi.Controllers;
                 where a.Hn == _para 
                 select new
                 {
-                    b.Pname, b.Fname, b.Lname
+                    a.Hn, b.Pname, b.Fname, b.Lname,a.Vstdate
                 };
-                return Json(query2.First());
+                return Json(query2.Take(1));
             }
             else
             {
@@ -83,9 +83,9 @@ namespace HosApi.Controllers;
                 where a.Hn == _para 
                 select new
                 {
-                    b.Pname, b.Fname, b.Lname
+                    a.Hn, b.Pname, b.Fname, b.Lname,a.Vstdate
                 };
-                return Json(query2.First());
+                return Json(query2.Take(1));
             }
             else
             {
