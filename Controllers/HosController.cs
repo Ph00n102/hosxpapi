@@ -1,3 +1,5 @@
+using System.Net;
+using System.Runtime.CompilerServices;
 using hosxpapi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,94 +14,83 @@ namespace HosApi.Controllers;
         {
             this.db = db;
         }
-        [HttpGet]
-        public IActionResult Get()
+
+
+        [HttpGet]       
+        public IActionResult getost(string _para)
         {
-            var query =
-            from a in db.Wards
-            select new
+            DateOnly dateOnly = DateOnly.FromDateTime(DateTime.Now);
+            // select i.hn,i.vstdate,p.pname,p.fname,p.lname from ovst i
+            // inner join patient p on p.hn  = i.hn
+            // where i.vstdate= DATE(NOW()) and i.oqueue = '2284'
+            var x = _para;
+            if (x.Length <= 4)
             {
-                a.Ward1,
-                a.Name,
-                a.OldCode,
-                a.Spclty,
-                a.Bedcount,
-                a.Shortname,
-                a.SssCode,
-                a.HosGuid,
-                a.NameOldSk,
-                a.ShortName1,
-                a.WardExportCode,
-                a.ShortNameBarcode,
-                a.WardActive,
-                a.IpdRxShiftTypeId,
-                a.SelectBednoFromLayout,
-                a.IpKey,
-                a.StrictAccess
-            };
-            return Json(query.Take(50));
-        } 
-         [HttpGet]
-        public IActionResult getHos (string paraHN)
-        { 
-            //  var query = Ovst  Patient
-            // from a in db.Wards
-            if (paraHN.Length == 7)
-                {
-                var queryHN =
-                from a in db.Patients
-                join b in db.Ovsts on a.Hn equals b.Hn  
-                where a.Hn == paraHN 
-                    select new
-                    {
-                        b.Hn,
-                        a.Cid,
-                        a.Pname,
-                        a.Fname,
-                        a.Lname
-                        // c.Name,
-                        // c.OldCode
-                    };
-                    return Json(queryHN.First());
-                    
-                }
-                DateOnly dateNow = DateOnly.FromDateTime(DateTime.Now);
-                var queryQN = 
+                var query1 = 
                 from a in db.Ovsts
                 join b in db.Patients on  a.Hn equals b.Hn
-                where a.Vstdate == dateNow && Convert.ToString( a.Oqueue ) == paraHN 
+                where a.Vstdate == dateOnly && Convert.ToString( a.Oqueue ) == _para 
                 select new
                 {
-                    a.Hn, 
-                    b.Pname, 
-                    b.Fname, 
-                    b.Lname,
-                    a.Vstdate
+                    a.Hn, b.Pname, b.Fname, b.Lname,a.Vstdate
                 };
-                return Json(queryQN.Take(50));
-                
-            // group a by a.Hn  into newGroup
-           
+                return Json(query1.Take(50));
+            }
+            else if (x.Length == 7)
+            {
+                var query2 = 
+                from a in db.Ovsts
+                join b in db.Patients on a.Hn equals b.Hn  
+                where a.Hn == _para 
+                select new
+                {
+                    a.Hn, b.Pname, b.Fname, b.Lname,a.Vstdate
+                };
+                return Json(query2.Take(1));
+            }
+            else
+            {
+                return StatusCode(200, "patient not found");
+            }
             
         }
-         [HttpGet]       
-        public IActionResult getQNdb(string paraQN)
+
+        [HttpPost]       
+        public IActionResult getost2(string _para)
         {
-            DateOnly dateNow = DateOnly.FromDateTime(DateTime.Now);
-            var query = 
-            from a in db.Ovsts
-            join b in db.Patients on  a.Hn equals b.Hn
-            where a.Vstdate == dateNow && Convert.ToString( a.Oqueue ) == paraQN 
-            select new
+            DateOnly dateOnly = DateOnly.FromDateTime(DateTime.Now);
+            // select i.hn,i.vstdate,p.pname,p.fname,p.lname from ovst i
+            // inner join patient p on p.hn  = i.hn
+            // where i.vstdate= DATE(NOW()) and i.oqueue = '2284'
+            var x = _para;
+            if (x.Length <= 4)
             {
-                a.Hn, 
-                b.Pname, 
-                b.Fname, 
-                b.Lname,
-                a.Vstdate
-            };
-            return Json(query.Take(50));
+                var query1 = 
+                from a in db.Ovsts
+                join b in db.Patients on  a.Hn equals b.Hn
+                where a.Vstdate == dateOnly && Convert.ToString( a.Oqueue ) == _para 
+                select new
+                {
+                    a.Hn, b.Pname, b.Fname, b.Lname,a.Vstdate
+                };
+                return Json(query1.Take(50));
+            }
+            else if (x.Length == 7)
+            {
+                var query2 = 
+                from a in db.Ovsts
+                join b in db.Patients on a.Hn equals b.Hn  
+                where a.Hn == _para 
+                select new
+                {
+                    a.Hn, b.Pname, b.Fname, b.Lname,a.Vstdate
+                };
+                return Json(query2.Take(1));
+            }
+            else
+            {
+                return StatusCode(200, "patient not found");
+            }
+            
         }
-        
-        
     }
