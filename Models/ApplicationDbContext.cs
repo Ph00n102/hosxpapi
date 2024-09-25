@@ -16,6 +16,12 @@ public partial class ApplicationDbContext : DbContext
     {
     }
 
+    public virtual DbSet<LabHead> LabHeads { get; set; }
+
+    public virtual DbSet<LabOrder> LabOrders { get; set; }
+
+    public virtual DbSet<Opduser> Opdusers { get; set; }
+
     public virtual DbSet<Ovst> Ovsts { get; set; }
 
     public virtual DbSet<Patient> Patients { get; set; }
@@ -23,13 +29,571 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Ward> Wards { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-      => optionsBuilder.UseMySql("server=172.16.5.39;port=3306;database=hos;userid=coachnrm;password=his_api_slave", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.1.37-mariadb"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=172.16.9.100;port=3306;database=hos;userid=tkipshos;password=g8wvrugvl", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.1.37-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
             .UseCollation("tis620_thai_ci")
             .HasCharSet("tis620");
+
+        modelBuilder.Entity<LabHead>(entity =>
+        {
+            entity.HasKey(e => e.LabOrderNumber).HasName("PRIMARY");
+
+            entity.ToTable("lab_head");
+
+            entity.HasIndex(e => e.ConfirmSpecimen, "confirm_specimen");
+
+            entity.HasIndex(e => e.Hn, "hn");
+
+            entity.HasIndex(e => e.FollowUpVn, "ix_follow_up_vn");
+
+            entity.HasIndex(e => new { e.Hn, e.OrderDate }, "ix_hn_order_date");
+
+            entity.HasIndex(e => e.HosGuid, "ix_hos_guid");
+
+            entity.HasIndex(e => e.LabOrderNumberGuid, "ix_lab_order_number_guid");
+
+            entity.HasIndex(e => e.LabReceiveNumber, "ix_lab_receive_number");
+
+            entity.HasIndex(e => e.LinkLabOrderNumber, "ix_link_lab_order_number");
+
+            entity.HasIndex(e => new { e.LinkLabOrderNumber, e.LabOrderNumber, e.FormName }, "ix_link_order_form");
+
+            entity.HasIndex(e => e.OrderDate, "ix_order_date");
+
+            entity.HasIndex(e => e.RefOrderCode, "ix_ref_order_code");
+
+            entity.HasIndex(e => e.ReportDate, "ix_report_date");
+
+            entity.HasIndex(e => e.ReportTime, "ix_report_time");
+
+            entity.HasIndex(e => e.Vn, "vn");
+
+            entity.Property(e => e.LabOrderNumber)
+                .ValueGeneratedNever()
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_order_number");
+            entity.Property(e => e.AbnormalResult)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("abnormal_result");
+            entity.Property(e => e.Anonymous)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("anonymous");
+            entity.Property(e => e.AnonymousRequest)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("anonymous_request");
+            entity.Property(e => e.Appointment)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("appointment");
+            entity.Property(e => e.AppointmentDate).HasColumnName("appointment_date");
+            entity.Property(e => e.AppointmentTime)
+                .HasColumnType("time")
+                .HasColumnName("appointment_time");
+            entity.Property(e => e.ApproveStaff)
+                .HasMaxLength(25)
+                .HasColumnName("approve_staff");
+            entity.Property(e => e.BatchNumber)
+                .HasColumnType("int(11)")
+                .HasColumnName("batch_number");
+            entity.Property(e => e.Clinic)
+                .HasMaxLength(3)
+                .IsFixedLength()
+                .HasColumnName("clinic");
+            entity.Property(e => e.ConfirmChargeMoney)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("confirm_charge_money");
+            entity.Property(e => e.ConfirmReport)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("confirm_report");
+            entity.Property(e => e.ConfirmSpecimen)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("confirm_specimen");
+            entity.Property(e => e.Department)
+                .HasMaxLength(5)
+                .HasColumnName("department");
+            entity.Property(e => e.DoctorAckDatetime)
+                .HasColumnType("datetime")
+                .HasColumnName("doctor_ack_datetime");
+            entity.Property(e => e.DoctorCertId)
+                .HasColumnType("int(11)")
+                .HasColumnName("doctor_cert_id");
+            entity.Property(e => e.DoctorCode)
+                .HasMaxLength(7)
+                .HasColumnName("doctor_code");
+            entity.Property(e => e.EntryDatetime)
+                .HasColumnType("datetime")
+                .HasColumnName("entry_datetime");
+            entity.Property(e => e.FinanceLabClear)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("finance_lab_clear");
+            entity.Property(e => e.FinanceLabConfirm)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("finance_lab_confirm");
+            entity.Property(e => e.FinanceLock)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("finance_lock");
+            entity.Property(e => e.FollowUpVn)
+                .HasMaxLength(12)
+                .HasColumnName("follow_up_vn");
+            entity.Property(e => e.FormId)
+                .HasColumnType("int(11)")
+                .HasColumnName("form_id");
+            entity.Property(e => e.FormName)
+                .HasMaxLength(200)
+                .HasColumnName("form_name");
+            entity.Property(e => e.HasManualItem)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("has_manual_item");
+            entity.Property(e => e.Hn)
+                .HasMaxLength(9)
+                .HasColumnName("hn");
+            entity.Property(e => e.HosGuid)
+                .HasMaxLength(38)
+                .HasColumnName("hos_guid");
+            entity.Property(e => e.HospitalDepartmentId)
+                .HasColumnType("int(11)")
+                .HasColumnName("hospital_department_id");
+            entity.Property(e => e.ImageCount)
+                .HasColumnType("int(11)")
+                .HasColumnName("image_count");
+            entity.Property(e => e.IsOutlab)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("is_outlab");
+            entity.Property(e => e.ItemCount)
+                .HasColumnType("int(11)")
+                .HasColumnName("item_count");
+            entity.Property(e => e.LabHeadRejectTypeId)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_head_reject_type_id");
+            entity.Property(e => e.LabHeadRemark)
+                .HasMaxLength(250)
+                .HasColumnName("lab_head_remark");
+            entity.Property(e => e.LabItemsGroupCode)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_items_group_code");
+            entity.Property(e => e.LabOrderNumberGuid)
+                .HasMaxLength(38)
+                .HasColumnName("lab_order_number_guid");
+            entity.Property(e => e.LabPerformStatusId)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_perform_status_id");
+            entity.Property(e => e.LabPriorityId)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_priority_id");
+            entity.Property(e => e.LabReceive)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("lab_receive");
+            entity.Property(e => e.LabReceiveNumber)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_receive_number");
+            entity.Property(e => e.LabRequestTypeId)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_request_type_id");
+            entity.Property(e => e.LabRoomId)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_room_id");
+            entity.Property(e => e.LinkLabOrderNumber)
+                .HasColumnType("int(11)")
+                .HasColumnName("link_lab_order_number");
+            entity.Property(e => e.LisCalcFinance)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("lis_calc_finance");
+            entity.Property(e => e.LisOrderNo)
+                .HasMaxLength(25)
+                .HasColumnName("lis_order_no");
+            entity.Property(e => e.LisTubeMachine)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("lis_tube_machine");
+            entity.Property(e => e.LockResult)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("lock_result");
+            entity.Property(e => e.MasterFormId)
+                .HasColumnType("int(11)")
+                .HasColumnName("master_form_id");
+            entity.Property(e => e.MasterFormName)
+                .HasMaxLength(200)
+                .HasColumnName("master_form_name");
+            entity.Property(e => e.NotifyDepcode)
+                .HasMaxLength(3)
+                .HasColumnName("notify_depcode");
+            entity.Property(e => e.OpdQsSlotId)
+                .HasColumnType("int(11)")
+                .HasColumnName("opd_qs_slot_id");
+            entity.Property(e => e.OrderComputerName)
+                .HasMaxLength(50)
+                .HasColumnName("order_computer_name");
+            entity.Property(e => e.OrderDate).HasColumnName("order_date");
+            entity.Property(e => e.OrderDepartment)
+                .HasMaxLength(3)
+                .IsFixedLength()
+                .HasColumnName("order_department");
+            entity.Property(e => e.OrderNote)
+                .HasColumnType("text")
+                .HasColumnName("order_note");
+            entity.Property(e => e.OrderStaff)
+                .HasMaxLength(25)
+                .HasColumnName("order_staff");
+            entity.Property(e => e.OrderTime)
+                .HasColumnType("time")
+                .HasColumnName("order_time");
+            entity.Property(e => e.ReceiveComputer)
+                .HasMaxLength(25)
+                .HasColumnName("receive_computer");
+            entity.Property(e => e.ReceiveDate).HasColumnName("receive_date");
+            entity.Property(e => e.ReceiveStaff)
+                .HasMaxLength(25)
+                .HasColumnName("receive_staff");
+            entity.Property(e => e.ReceiveTime)
+                .HasColumnType("time")
+                .HasColumnName("receive_time");
+            entity.Property(e => e.RefOrderCode)
+                .HasMaxLength(50)
+                .HasColumnName("ref_order_code");
+            entity.Property(e => e.ReportDate).HasColumnName("report_date");
+            entity.Property(e => e.ReportDoctorCertId)
+                .HasColumnType("int(11)")
+                .HasColumnName("report_doctor_cert_id");
+            entity.Property(e => e.ReportLock)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("report_lock");
+            entity.Property(e => e.ReportLockComputer)
+                .HasMaxLength(50)
+                .HasColumnName("report_lock_computer");
+            entity.Property(e => e.ReportLockDatetime)
+                .HasColumnType("datetime")
+                .HasColumnName("report_lock_datetime");
+            entity.Property(e => e.ReportTime)
+                .HasColumnType("time")
+                .HasColumnName("report_time");
+            entity.Property(e => e.ReporterName)
+                .HasMaxLength(100)
+                .HasColumnName("reporter_name");
+            entity.Property(e => e.ResultNote)
+                .HasColumnType("text")
+                .HasColumnName("result_note");
+            entity.Property(e => e.ResultRtf).HasColumnName("result_rtf");
+            entity.Property(e => e.SendMobileMsg)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("send_mobile_msg");
+            entity.Property(e => e.SendToCashier)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("send_to_cashier");
+            entity.Property(e => e.Spclty)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("spclty");
+            entity.Property(e => e.SpecimenCode)
+                .HasColumnType("int(11)")
+                .HasColumnName("specimen_code");
+            entity.Property(e => e.SubGroupList)
+                .HasMaxLength(200)
+                .HasColumnName("sub_group_list");
+            entity.Property(e => e.UpdateDatetime)
+                .HasColumnType("datetime")
+                .HasColumnName("update_datetime");
+            entity.Property(e => e.Vn)
+                .HasMaxLength(13)
+                .HasColumnName("vn");
+            entity.Property(e => e.Ward)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("ward");
+        });
+
+        modelBuilder.Entity<LabOrder>(entity =>
+        {
+            entity.HasKey(e => new { e.LabOrderNumber, e.LabItemsCode })
+                .HasName("PRIMARY")
+                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+
+            entity.ToTable("lab_order");
+
+            entity.HasIndex(e => e.HosGuid, "ix_hos_guid");
+
+            entity.HasIndex(e => e.HosGuidExt, "ix_hos_guid_ext");
+
+            entity.HasIndex(e => e.LabItemsCode, "ix_lab_items_code");
+
+            entity.HasIndex(e => e.LaborderDate, "ix_laborder_date");
+
+            entity.HasIndex(e => e.LabOrderNumber, "lab_order_number");
+
+            entity.Property(e => e.LabOrderNumber)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_order_number");
+            entity.Property(e => e.LabItemsCode)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_items_code");
+            entity.Property(e => e.AbnormalResult)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("abnormal_result");
+            entity.Property(e => e.CheckKey)
+                .HasMaxLength(50)
+                .HasColumnName("check_key");
+            entity.Property(e => e.CheckKeyA)
+                .HasMaxLength(50)
+                .HasColumnName("check_key_a");
+            entity.Property(e => e.Confirm)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("confirm");
+            entity.Property(e => e.CriticalResult)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("critical_result");
+            entity.Property(e => e.HosGuid)
+                .HasMaxLength(38)
+                .HasColumnName("hos_guid");
+            entity.Property(e => e.HosGuidExt)
+                .HasMaxLength(64)
+                .HasColumnName("hos_guid_ext");
+            entity.Property(e => e.ItemCost)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("item_cost");
+            entity.Property(e => e.LabHistCompareTypeId)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_hist_compare_type_id");
+            entity.Property(e => e.LabItemsNameRef)
+                .HasMaxLength(250)
+                .HasColumnName("lab_items_name_ref");
+            entity.Property(e => e.LabItemsNormalValueRef)
+                .HasMaxLength(150)
+                .HasColumnName("lab_items_normal_value_ref");
+            entity.Property(e => e.LabItemsSubGroupCode)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_items_sub_group_code");
+            entity.Property(e => e.LabOrderRemark)
+                .HasMaxLength(250)
+                .HasColumnName("lab_order_remark");
+            entity.Property(e => e.LabOrderResult)
+                .HasMaxLength(250)
+                .HasColumnName("lab_order_result");
+            entity.Property(e => e.LabResultStatus)
+                .HasColumnType("int(11)")
+                .HasColumnName("lab_result_status");
+            entity.Property(e => e.LaborderDate).HasColumnName("laborder_date");
+            entity.Property(e => e.OrderType)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("order_type");
+            entity.Property(e => e.Printed)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("printed");
+            entity.Property(e => e.PrintedDatetime)
+                .HasColumnType("datetime")
+                .HasColumnName("printed_datetime");
+            entity.Property(e => e.SendNotify)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("send_notify");
+            entity.Property(e => e.SpecimenCode)
+                .HasColumnType("int(11)")
+                .HasColumnName("specimen_code");
+            entity.Property(e => e.Staff)
+                .HasMaxLength(50)
+                .HasColumnName("staff");
+            entity.Property(e => e.StaffLockResult)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("staff_lock_result");
+            entity.Property(e => e.UpdateDatetime)
+                .HasColumnType("datetime")
+                .HasColumnName("update_datetime");
+        });
+
+        modelBuilder.Entity<Opduser>(entity =>
+        {
+            entity.HasKey(e => e.Loginname).HasName("PRIMARY");
+
+            entity.ToTable("opduser");
+
+            entity.HasIndex(e => e.Department, "department");
+
+            entity.HasIndex(e => e.Groupname, "groupname");
+
+            entity.HasIndex(e => e.Cid, "ix_cid");
+
+            entity.HasIndex(e => e.Doctorcode, "ix_doctorcode");
+
+            entity.HasIndex(e => e.HosGuid, "ix_hos_guid");
+
+            entity.HasIndex(e => e.HosGuidExt, "ix_hos_guid_ext");
+
+            entity.HasIndex(e => e.Name, "name");
+
+            entity.HasIndex(e => e.Password, "password");
+
+            entity.Property(e => e.Loginname)
+                .HasMaxLength(250)
+                .HasColumnName("loginname");
+            entity.Property(e => e.Accessright)
+                .HasColumnType("text")
+                .HasColumnName("accessright");
+            entity.Property(e => e.AccountDisable)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("account_disable");
+            entity.Property(e => e.AnnounceReadCount)
+                .HasColumnType("int(11)")
+                .HasColumnName("announce_read_count");
+            entity.Property(e => e.AutoLogoutMinute)
+                .HasColumnType("int(11)")
+                .HasColumnName("auto_logout_minute");
+            entity.Property(e => e.CheckLabPassword)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("check_lab_password");
+            entity.Property(e => e.Cid)
+                .HasMaxLength(13)
+                .HasColumnName("cid");
+            entity.Property(e => e.Department)
+                .HasMaxLength(250)
+                .HasColumnName("department");
+            entity.Property(e => e.Departmentposition)
+                .HasMaxLength(250)
+                .HasColumnName("departmentposition");
+            entity.Property(e => e.Doctorcode)
+                .HasMaxLength(7)
+                .HasColumnName("doctorcode");
+            entity.Property(e => e.DrugAccessLevel)
+                .HasColumnType("tinyint(4)")
+                .HasColumnName("drug_access_level");
+            entity.Property(e => e.Entryposition)
+                .HasMaxLength(250)
+                .HasColumnName("entryposition");
+            entity.Property(e => e.Groupname)
+                .HasMaxLength(250)
+                .HasColumnName("groupname");
+            entity.Property(e => e.HosGuid)
+                .HasMaxLength(38)
+                .HasColumnName("hos_guid");
+            entity.Property(e => e.HosGuidExt)
+                .HasMaxLength(64)
+                .HasColumnName("hos_guid_ext");
+            entity.Property(e => e.HospitalDepartmentId)
+                .HasColumnType("int(11)")
+                .HasColumnName("hospital_department_id");
+            entity.Property(e => e.IclaimJwt)
+                .HasColumnType("text")
+                .HasColumnName("iclaim_jwt");
+            entity.Property(e => e.LabCheckPassword)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("lab_check_password");
+            entity.Property(e => e.LabStaff)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("lab_staff");
+            entity.Property(e => e.MaxStation)
+                .HasColumnType("int(11)")
+                .HasColumnName("max_station");
+            entity.Property(e => e.MophAccPassword)
+                .HasMaxLength(250)
+                .HasColumnName("moph_acc_password");
+            entity.Property(e => e.MophAccUser)
+                .HasMaxLength(50)
+                .HasColumnName("moph_acc_user");
+            entity.Property(e => e.Name)
+                .HasMaxLength(250)
+                .HasColumnName("name");
+            entity.Property(e => e.NewPasswordDate).HasColumnName("new_password_date");
+            entity.Property(e => e.NhsoPassword)
+                .HasMaxLength(250)
+                .HasColumnName("nhso_password");
+            entity.Property(e => e.NhsoUser)
+                .HasMaxLength(250)
+                .HasColumnName("nhso_user");
+            entity.Property(e => e.NoAnnounceDisplay)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("no_announce_display");
+            entity.Property(e => e.NoDoctorConsultDisplay)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("no_doctor_consult_display");
+            entity.Property(e => e.NoLabResultDisplay)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("no_lab_result_display");
+            entity.Property(e => e.Passweb)
+                .HasMaxLength(250)
+                .HasColumnName("passweb");
+            entity.Property(e => e.Password)
+                .HasMaxLength(250)
+                .HasColumnName("password");
+            entity.Property(e => e.PasswordExpireDate).HasColumnName("password_expire_date");
+            entity.Property(e => e.PasswordRecheckDate)
+                .HasColumnType("int(11)")
+                .HasColumnName("password_recheck_date");
+            entity.Property(e => e.PcuUser)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("pcu_user");
+            entity.Property(e => e.Picture).HasColumnName("picture");
+            entity.Property(e => e.RealStaff)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("real_staff");
+            entity.Property(e => e.RestrictClinicAccess)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("restrict_clinic_access");
+            entity.Property(e => e.RestrictWardAccess)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("restrict_ward_access");
+            entity.Property(e => e.SendMophOtp)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("send_moph_otp");
+            entity.Property(e => e.ShowTip)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("show_tip");
+            entity.Property(e => e.Startfullscreen)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("startfullscreen");
+            entity.Property(e => e.Turbohosxp)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("turbohosxp");
+            entity.Property(e => e.Viewallmenu)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("viewallmenu");
+            entity.Property(e => e.VisibleMenu)
+                .HasColumnType("text")
+                .HasColumnName("visible_menu");
+            entity.Property(e => e.XrayStaff)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("xray_staff");
+        });
 
         modelBuilder.Entity<Ovst>(entity =>
         {
