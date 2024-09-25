@@ -176,4 +176,28 @@ namespace HosApi.Controllers;
             return StatusCode(200, "vn are found in ovst table"); 
             
         }
+
+        // เพิ่ม vn ในตาราง ovst
+        [HttpPost]
+        public IActionResult OpenVisit(Ovst _data)
+        {
+            db.Ovsts.Add(_data);
+            db.SaveChanges();
+
+            return Ok(_data);
+        }
+
+        // query ovst ตาม vn
+        [HttpGet]
+        public IActionResult GetOvstByVn (string _vn)
+        {
+            var query = 
+                from a in db.Ovsts 
+                where a.Vn == _vn
+                select new
+                {
+                    a.HosGuid, a.Vn, a.Hn, a.An, a.Vstdate, a.Vsttime, a.Doctor, a.Hospmain, a.Hospsub, a.Oqueue, a.Ovstist, a.Ovstost, a.Pttype, a.Pttypeno, a.Rfrics, a.Rfrilct, a.Rfrocs, a.Rfrolct, a.Spclty, a.RcptDisease , a.Hcode, a.CurDep, a.CurDepBusy, a.LastDep, a.CurDepTime, a.RxQueue, a.DiagText, a.PtSubtype, a.MainDep, a.MainDepQueue, a.FinanceSummaryDate, a.VisitType, a.NodeId, a.ContractId, a.Waiting, a.RfriIcd10, a.OReferNumber, a.HasInsurance, a.IReferNumber, a.ReferType, a.OReferDep, a.Staff, a.CommandDoctor, a.SendPerson, a.PtPriority, a.FinanceLock, a.FinanceAlient, a.Oldcode, a.SignDoctor, a.AnonymousVisit, a.AnonymousVn, a.PtCapabilityTypeId, a.AtHospital, a.OvstKey
+                };
+                return Json(query.Take(1));
+        }
     }
