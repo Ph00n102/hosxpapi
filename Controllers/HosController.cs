@@ -23,8 +23,8 @@ namespace HosApi.Controllers;
             // select i.hn,i.vstdate,p.pname,p.fname,p.lname from ovst i
             // inner join patient p on p.hn  = i.hn
             // where i.vstdate= DATE(NOW()) and i.oqueue = '2284'
-            var x = _para;
-            if (x.Length <= 4)
+            string x = _para;
+            if (x.Length < 5)
             {
                 var query1 = 
                 from a in db.Ovsts
@@ -32,7 +32,7 @@ namespace HosApi.Controllers;
                 where a.Vstdate == dateOnly && Convert.ToString( a.Oqueue ) == _para 
                 select new
                 {
-                    a.Hn, b.Pname, b.Fname, b.Lname,a.Vstdate
+                    a.Hn, b.Pname, b.Fname, b.Lname, a.Vstdate
                 };
                 return Json(query1.Take(50));
             }
