@@ -152,6 +152,7 @@ namespace HosApi.Controllers;
             
         }
 
+        // generate vn
         [HttpGet]
         public IActionResult GetDateTimeNow()
         {
@@ -161,5 +162,18 @@ namespace HosApi.Controllers;
         }
     
 
-        
+        // เช็ค vn ว่ามีอยู่ใน table ovst หรือไม่
+        [HttpGet]
+        public IActionResult CheckVn(string _vn)
+        {
+            
+            var query = 
+            db.Ovsts.SingleOrDefault(u => u.Vn == _vn);
+            if (query == null)
+            {
+                return StatusCode(404, "vn are not found in ovst table"); 
+            }
+            return StatusCode(200, "vn are found in ovst table"); 
+            
+        }
     }
