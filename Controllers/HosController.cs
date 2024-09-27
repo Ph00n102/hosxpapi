@@ -5,6 +5,7 @@ using hosxpapi.Models;
 using Microsoft.AspNetCore.Mvc;
 //using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace HosApi.Controllers;
 
@@ -187,13 +188,127 @@ namespace HosApi.Controllers;
             return Ok(_data);
         }
 
-        // query ovst ตาม vn
+        
+
+        [HttpPut("{_HosGuid}")]
+        public async Task<ActionResult> UpdateOvst(string _HosGuid, Ovst ovst)
+        {
+            if (_HosGuid != ovst.HosGuid)
+            {
+                return BadRequest();
+            }
+            var result = await db.Ovsts.FindAsync(_HosGuid);
+            if(result == null)
+            {
+                return NotFound();
+            }
+
+            result.HosGuid = ovst.HosGuid;
+            result.Vn = ovst.Vn;
+            result.Hn = ovst.Hn;
+            result.An = ovst.An;
+            result.Vstdate = ovst.Vstdate;
+            result.Vsttime = ovst.Vsttime;
+            result.Doctor = ovst.Doctor;
+            result.Hospmain = ovst.Hospmain;
+            result.Hospsub = ovst.Hospsub;
+            result.Oqueue = ovst.Oqueue;
+            result.Ovstist = ovst.Ovstist;
+            result.Ovstost = ovst.Ovstost;
+            result.Pttype = ovst.Pttype;
+            result.Pttypeno = ovst.Pttypeno;
+            result.Rfrics = ovst.Rfrics;
+            result.Rfrilct = ovst.Rfrilct;
+            result.Rfrocs = ovst.Rfrocs;
+            result.Rfrolct = ovst.Rfrolct;
+            result.Spclty = ovst.Spclty;
+            result.RcptDisease = ovst.RcptDisease;
+            result.Hcode = ovst.Hcode;
+            result.CurDep = ovst.CurDep;
+            result.CurDepBusy = ovst.CurDepBusy;
+            result.LastDep = ovst.LastDep;
+            result.CurDepTime = ovst.CurDepTime;
+            result.RxQueue = ovst.RxQueue;
+            result.DiagText = ovst.DiagText;
+            result.PtSubtype = ovst.PtSubtype;
+            result.MainDep = ovst.MainDep;
+            result.MainDepQueue = ovst.MainDepQueue;
+            result.FinanceSummaryDate = ovst.FinanceSummaryDate;
+            result.VisitType = ovst.VisitType;
+            result.NodeId = ovst.NodeId;
+            result.ContractId = ovst.ContractId;
+            result.Waiting = ovst.Waiting;
+            result.RfriIcd10 = ovst.RfriIcd10;
+            result.OReferNumber = ovst.OReferNumber;
+            result.HasInsurance = ovst.HasInsurance;
+            result.IReferNumber = ovst.IReferNumber;
+            result.ReferType = ovst.ReferType;
+            result.OReferDep = ovst.OReferDep;
+            result.Staff = ovst.Staff;
+            result.CommandDoctor = ovst.CommandDoctor;
+            result.SendPerson = ovst.SendPerson;
+            result.PtPriority = ovst.PtPriority;
+            result.FinanceLock = ovst.FinanceLock;
+            result.FinanceAlient = ovst.FinanceAlient;
+            result.Oldcode = ovst.Oldcode;
+            result.SignDoctor = ovst.SignDoctor;
+            result.AnonymousVisit = ovst.AnonymousVisit;
+            result.AnonymousVn = ovst.AnonymousVn;
+            result.PtCapabilityTypeId = ovst.PtCapabilityTypeId;
+            result.AtHospital = ovst.AtHospital;
+            result.OvstKey = ovst.OvstKey;
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) when (!OvstExists(_HosGuid))
+            {
+                return NotFound();
+            }      
+
+            return NoContent();
+        }
+
+
+        private bool OvstExists(string _HosGuid)
+        {
+            return db.Ovsts.Any(e => e.HosGuid == _HosGuid);
+        }
+
+        [HttpDelete("{_HosGuid}")]
+        public async Task<IActionResult> DeleteOvst(string _HosGuid)
+        {
+            var result = await db.Ovsts.FindAsync(_HosGuid);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            db.Ovsts.Remove(result);
+            await db.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         [HttpGet]
         public IActionResult GetOvstByVn (string _vn)
         {
             var query = 
                 from a in db.Ovsts 
                 where a.Vn == _vn
+                select new
+                {
+                    a.HosGuid, a.Vn, a.Hn, a.An, a.Vstdate, a.Vsttime, a.Doctor, a.Hospmain, a.Hospsub, a.Oqueue, a.Ovstist, a.Ovstost, a.Pttype, a.Pttypeno, a.Rfrics, a.Rfrilct, a.Rfrocs, a.Rfrolct, a.Spclty, a.RcptDisease , a.Hcode, a.CurDep, a.CurDepBusy, a.LastDep, a.CurDepTime, a.RxQueue, a.DiagText, a.PtSubtype, a.MainDep, a.MainDepQueue, a.FinanceSummaryDate, a.VisitType, a.NodeId, a.ContractId, a.Waiting, a.RfriIcd10, a.OReferNumber, a.HasInsurance, a.IReferNumber, a.ReferType, a.OReferDep, a.Staff, a.CommandDoctor, a.SendPerson, a.PtPriority, a.FinanceLock, a.FinanceAlient, a.Oldcode, a.SignDoctor, a.AnonymousVisit, a.AnonymousVn, a.PtCapabilityTypeId, a.AtHospital, a.OvstKey
+                };
+                return Json(query.Take(1));
+        }
+
+         [HttpGet]
+        public IActionResult GetOvstByHg (string _HosGuid)
+        {
+            var query = 
+                from a in db.Ovsts 
+                where a.HosGuid == _HosGuid
                 select new
                 {
                     a.HosGuid, a.Vn, a.Hn, a.An, a.Vstdate, a.Vsttime, a.Doctor, a.Hospmain, a.Hospsub, a.Oqueue, a.Ovstist, a.Ovstost, a.Pttype, a.Pttypeno, a.Rfrics, a.Rfrilct, a.Rfrocs, a.Rfrolct, a.Spclty, a.RcptDisease , a.Hcode, a.CurDep, a.CurDepBusy, a.LastDep, a.CurDepTime, a.RxQueue, a.DiagText, a.PtSubtype, a.MainDep, a.MainDepQueue, a.FinanceSummaryDate, a.VisitType, a.NodeId, a.ContractId, a.Waiting, a.RfriIcd10, a.OReferNumber, a.HasInsurance, a.IReferNumber, a.ReferType, a.OReferDep, a.Staff, a.CommandDoctor, a.SendPerson, a.PtPriority, a.FinanceLock, a.FinanceAlient, a.Oldcode, a.SignDoctor, a.AnonymousVisit, a.AnonymousVn, a.PtCapabilityTypeId, a.AtHospital, a.OvstKey
