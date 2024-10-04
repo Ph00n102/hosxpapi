@@ -111,6 +111,25 @@ namespace HosApi.Controllers;
                          {
                              a.Loginname,
                              a.Passweb
+                         }).FirstOrDefault());
+           }
+           
+            
+        }
+
+        // ค้นหาชื่อ user ใน hosxp ด้วย username, password ด้วยการ login
+        [HttpPost]
+        public IActionResult PostUser (string uname,string para)
+        { 
+           var x = MD5Hash(para);
+           {
+                return Json((from a in db.Opdusers
+                         where a.Loginname == uname && a.Passweb == x 
+
+                         select new
+                         {
+                             a.Loginname,
+                             a.Passweb
                             
 
                          }).FirstOrDefault());
@@ -315,4 +334,18 @@ namespace HosApi.Controllers;
                 };
                 return Json(query.Take(1));
         }
+
+        [HttpGet]
+        public IActionResult GetDoctor()
+        {
+            //*SELECT * FROM `doctor` where licenseno like "%ว%"
+            var query =
+                from a in db.Doctors where a.Licenseno.Contains("ว") && !a.Name.Contains("(ยกเลิก)") && !a.Name.Contains("(ยกเลิกการใช้เนื่องจากส่งเบิกไม่ได้)") && !a.Name.Contains("เจ้าหน้าที่")
+                select new 
+                {
+                    a.Name, a.Licenseno
+                };
+                return Json(query.Take(1300));
+        }
+    
     }
