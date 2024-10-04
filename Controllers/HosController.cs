@@ -3,9 +3,10 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using hosxpapi.Models;
 using Microsoft.AspNetCore.Mvc;
-//using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using Microsoft.VisualBasic;
+//using Microsoft.EntityFrameworkCore;
 
 namespace HosApi.Controllers;
 
@@ -340,12 +341,28 @@ namespace HosApi.Controllers;
         {
             //*SELECT * FROM `doctor` where licenseno like "%ว%"
             var query =
-                from a in db.Doctors where a.Licenseno.Contains("ว") && !a.Name.Contains("(ยกเลิก)") && !a.Name.Contains("(ยกเลิกการใช้เนื่องจากส่งเบิกไม่ได้)") && !a.Name.Contains("เจ้าหน้าที่")
+                from a in db.Doctors where a.Licenseno.Contains("ว") && !a.Name.Contains("(ยกเลิก)") && !a.Name.Contains("(ยกเลิกการใช้เนื่องจากส่งเบิกไม่ได้)") && !a.Name.Contains("เจ้าหน้าที่") && !a.Name.Contains("พท.ป") && !a.Licenseno.Contains("00000")
                 select new 
                 {
                     a.Name, a.Licenseno
                 };
                 return Json(query.Take(1300));
         }
-    
+
+        [HttpGet]
+        public IActionResult GetDoctorBySearchName(string name)
+        {  
+            var results = 
+                from a in db.Doctors where a.Licenseno.Contains("ว") && !a.Name.Contains("(ยกเลิก)") && !a.Name.Contains("(ยกเลิกการใช้เนื่องจากส่งเบิกไม่ได้)") && !a.Name.Contains("เจ้าหน้าที่") && !a.Name.Contains("พท.ป") && !a.Licenseno.Contains("00000")
+                &&  a.Name.Contains(name) 
+                select new
+                {
+                    a.Name
+                };
+                
+            
+            return Ok(results);
+                
+        }
+
     }
