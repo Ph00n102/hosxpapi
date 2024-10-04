@@ -18,6 +18,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Doctor> Doctors { get; set; }
 
+    public virtual DbSet<Hospcode> Hospcodes { get; set; }
+
     public virtual DbSet<LabHead> LabHeads { get; set; }
 
     public virtual DbSet<LabOrder> LabOrders { get; set; }
@@ -256,6 +258,96 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Zoipart)
                 .HasMaxLength(20)
                 .HasColumnName("zoipart");
+        });
+
+        modelBuilder.Entity<Hospcode>(entity =>
+        {
+            entity.HasKey(e => e.Hospcode1).HasName("PRIMARY");
+
+            entity.ToTable("hospcode");
+
+            entity.HasIndex(e => e.Amppart, "amppart");
+
+            entity.HasIndex(e => e.Chwpart, "chwpart");
+
+            entity.HasIndex(e => e.Hosptype, "hosptype");
+
+            entity.HasIndex(e => e.HosGuid, "ix_hos_guid");
+
+            entity.HasIndex(e => e.HosGuidExt, "ix_hos_guid_ext");
+
+            entity.HasIndex(e => e.SssCode, "ix_sss_code");
+
+            entity.HasIndex(e => new { e.Amppart, e.Chwpart, e.Tmbpart }, "ix_tmbpart_amppart");
+
+            entity.HasIndex(e => e.Name, "name");
+
+            entity.HasIndex(e => e.Tmbpart, "tmbpart");
+
+            entity.Property(e => e.Hospcode1)
+                .HasMaxLength(5)
+                .HasColumnName("hospcode");
+            entity.Property(e => e.Addrpart)
+                .HasMaxLength(150)
+                .HasColumnName("addrpart");
+            entity.Property(e => e.Amppart)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("amppart");
+            entity.Property(e => e.AreaCode)
+                .HasMaxLength(2)
+                .HasColumnName("area_code");
+            entity.Property(e => e.BedCount)
+                .HasColumnType("int(11)")
+                .HasColumnName("bed_count");
+            entity.Property(e => e.Chwpart)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("chwpart");
+            entity.Property(e => e.HosGuid)
+                .HasMaxLength(38)
+                .HasColumnName("hos_guid");
+            entity.Property(e => e.HosGuidExt)
+                .HasMaxLength(64)
+                .HasColumnName("hos_guid_ext");
+            entity.Property(e => e.Hospcode506)
+                .HasMaxLength(15)
+                .HasColumnName("hospcode506");
+            entity.Property(e => e.HospitalFax)
+                .HasMaxLength(50)
+                .HasColumnName("hospital_fax");
+            entity.Property(e => e.HospitalLevelId)
+                .HasColumnType("int(11)")
+                .HasColumnName("hospital_level_id");
+            entity.Property(e => e.HospitalPhone)
+                .HasMaxLength(50)
+                .HasColumnName("hospital_phone");
+            entity.Property(e => e.HospitalTypeId)
+                .HasColumnType("int(11)")
+                .HasColumnName("hospital_type_id");
+            entity.Property(e => e.Hosptype)
+                .HasMaxLength(50)
+                .HasColumnName("hosptype");
+            entity.Property(e => e.Moopart)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("moopart");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name");
+            entity.Property(e => e.PoCode)
+                .HasMaxLength(5)
+                .HasColumnName("po_code");
+            entity.Property(e => e.SssCode)
+                .HasMaxLength(12)
+                .HasColumnName("sss_code");
+            entity.Property(e => e.SssCodeSub)
+                .HasMaxLength(12)
+                .HasColumnName("sss_code_sub");
+            entity.Property(e => e.Tmbpart)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("tmbpart");
         });
 
         modelBuilder.Entity<LabHead>(entity =>
