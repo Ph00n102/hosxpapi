@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using Microsoft.VisualBasic;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 //using Microsoft.EntityFrameworkCore;
 
 namespace HosApi.Controllers;
@@ -370,7 +371,7 @@ namespace HosApi.Controllers;
         public IActionResult GetHospitalSearchName(string name)
         {
             var results =
-                from a in db.Hospcodes where a.Name.Contains(name)
+                from a in db.Hospcodes where a.Name.Contains(name) || a.Hospcode1.Contains(name)
                 select new
                 {
                     a.Hospcode1, a.Name
@@ -389,5 +390,17 @@ namespace HosApi.Controllers;
                     a.Ovstist1, a.Name
                 };
                 return Ok(query.Take(20));
+        }
+
+        [HttpGet]
+        public IActionResult GetOvstost(string name)
+        {
+            var query =
+                from a in db.Ovstosts where a.Ovstost1.Contains(name) || a.Name.Contains(name)
+                select new
+                {
+                    a.Ovstost1, a.Name
+                };
+                return Ok(query.Take(30));
         }
     }

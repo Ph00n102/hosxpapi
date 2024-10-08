@@ -30,6 +30,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Ovstist> Ovstists { get; set; }
 
+    public virtual DbSet<Ovstost> Ovstosts { get; set; }
+
     public virtual DbSet<Patient> Patients { get; set; }
 
     public virtual DbSet<Ward> Wards { get; set; }
@@ -1154,6 +1156,43 @@ public partial class ApplicationDbContext : DbContext
                 .HasMaxLength(2)
                 .IsFixedLength()
                 .HasColumnName("ovstist");
+        });
+
+        modelBuilder.Entity<Ovstost>(entity =>
+        {
+            entity.HasKey(e => e.Ovstost1).HasName("PRIMARY");
+
+            entity.ToTable("ovstost");
+
+            entity.HasIndex(e => e.HosGuid, "ix_hos_guid");
+
+            entity.Property(e => e.Ovstost1)
+                .HasMaxLength(4)
+                .HasColumnName("ovstost");
+            entity.Property(e => e.DeathStatus)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("death_status");
+            entity.Property(e => e.DefaultState)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("default_state");
+            entity.Property(e => e.ExportCode)
+                .HasMaxLength(5)
+                .HasColumnName("export_code");
+            entity.Property(e => e.HosGuid)
+                .HasMaxLength(38)
+                .HasColumnName("hos_guid");
+            entity.Property(e => e.ItemNo)
+                .HasColumnType("int(11)")
+                .HasColumnName("item_no");
+            entity.Property(e => e.Name)
+                .HasMaxLength(200)
+                .HasColumnName("name");
+            entity.Property(e => e.OpbkkCode)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("opbkk_code");
         });
 
         modelBuilder.Entity<Patient>(entity =>
