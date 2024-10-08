@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using Microsoft.VisualBasic;
+using System.ComponentModel;
 //using Microsoft.EntityFrameworkCore;
 
 namespace HosApi.Controllers;
@@ -344,7 +345,7 @@ namespace HosApi.Controllers;
                 from a in db.Doctors where a.Licenseno.Contains("ว") && !a.Name.Contains("(ยกเลิก)") && !a.Name.Contains("(ยกเลิกการใช้เนื่องจากส่งเบิกไม่ได้)") && !a.Name.Contains("เจ้าหน้าที่") && !a.Name.Contains("พท.ป") && !a.Licenseno.Contains("00000")
                 select new 
                 {
-                    a.Name, a.Licenseno
+                    a.Name, a.Licenseno, a.Code
                 };
                 return Json(query.Take(1300));
         }
@@ -354,10 +355,10 @@ namespace HosApi.Controllers;
         {  
             var results = 
                 from a in db.Doctors where a.Licenseno.Contains("ว") && !a.Name.Contains("(ยกเลิก)") && !a.Name.Contains("(ยกเลิกการใช้เนื่องจากส่งเบิกไม่ได้)") && !a.Name.Contains("เจ้าหน้าที่") && !a.Name.Contains("พท.ป") && !a.Licenseno.Contains("00000")
-                &&  a.Name.Contains(name) 
+                &&  a.Name.Contains(name) || a.Licenseno.Contains(name)
                 select new
                 {
-                    a.Name
+                    a.Name, a.Code
                 };
                 
             
@@ -365,4 +366,28 @@ namespace HosApi.Controllers;
                 
         }
 
+        [HttpGet]
+        public IActionResult GetHospitalSearchName(string name)
+        {
+            var results =
+                from a in db.Hospcodes where a.Name.Contains(name)
+                select new
+                {
+                    a.Hospcode1, a.Name
+                };
+
+            return Ok(results);
+        }
+
+        [HttpGet]
+        public IActionResult GetOvstist(string name)
+        {
+            var query =
+                from a in db.Ovstists where a.Name.Contains(name) || a.Ovstist1.Contains(name)
+                select new
+                {
+                    a.Ovstist1, a.Name
+                };
+                return Ok(query.Take(20));
+        }
     }
