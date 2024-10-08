@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using Microsoft.VisualBasic;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 //using Microsoft.EntityFrameworkCore;
 
 namespace HosApi.Controllers;
@@ -379,6 +380,17 @@ namespace HosApi.Controllers;
 
             return Ok(results);
         }
+         [HttpGet]
+        public IActionResult GetOvstistAll()
+        {
+            var query =
+                from a in db.Ovstists orderby a.Ovstist1
+                select new
+                {
+                    a.Ovstist1, a.Name
+                };
+                return Ok(query.Take(20));
+        }
 
         [HttpGet]
         public IActionResult GetOvstist(string name)
@@ -393,6 +405,18 @@ namespace HosApi.Controllers;
         }
 
         [HttpGet]
+        public IActionResult GetOvstostAll()
+        {
+            var query =
+                from a in db.Ovstosts orderby a.Ovstost1
+                select new
+                {
+                    a.Ovstost1, a.Name
+                };
+                return Ok(query.Take(30));
+        }
+
+        [HttpGet]
         public IActionResult GetOvstost(string name)
         {
             var query =
@@ -402,5 +426,77 @@ namespace HosApi.Controllers;
                     a.Ovstost1, a.Name
                 };
                 return Ok(query.Take(30));
+        }
+
+        [HttpGet]
+        public IActionResult GetPttypeAll()
+        {
+            var query =
+                from a in db.Pttypes where !a.Name.Contains("(ยกเลิก)") orderby a.Pttype1
+                select new
+                {
+                    a.Pttype1, a.Name
+                };
+                return Ok(query.Take(300));
+        }
+
+        [HttpGet]
+        public IActionResult GetPttype(string name)
+        {
+            var query =
+                from a in db.Pttypes where a.Pttype1.Contains(name) || a.Name.Contains(name) && !a.Name.Contains("(ยกเลิก)")
+                select new
+                {
+                    a.Pttype1, a.Name
+                };
+                return Ok(query.Take(300));
+        }
+
+        [HttpGet]
+        public IActionResult GetSpcltyAll()
+        {
+            var query =
+                from a in db.Spclties orderby a.Spclty1
+                select new
+                {
+                    a.Spclty1, a.Name
+                };
+                return Ok(query.Take(60));
+        }
+
+        [HttpGet]
+        public IActionResult GetSpclty(string name)
+        {
+            var query =
+                from a in db.Spclties where a.Spclty1.Contains(name) || a.Name.Contains(name)
+                select new
+                {
+                    a.Spclty1, a.Name
+                };
+                return Ok(query.Take(60));
+        }
+
+        [HttpGet]
+        public IActionResult GetOpdDepAll()
+        {
+            var query =
+                from a in db.Kskdepartments where !a.Department.Contains("(ยกเลิก)") && !a.Department.Contains("(เลิกใข้)") orderby a.Depcode
+                select new
+                {
+                    a.Depcode, a.Department
+                };
+                return Ok(query.Take(600));
+        }
+
+        [HttpGet]
+        public IActionResult GetOpdDep(string name)
+        {
+            var query =
+                from a in db.Kskdepartments where a.Depcode.Contains(name) || a.Department.Contains(name) && !a.Department.Contains("(ยกเลิก)") && !a.Department.Contains("(เลิกใข้)")
+                select new
+                {
+                    a.Depcode, a.Department
+                };
+                return Ok(query.Take(60));
         }
     }
