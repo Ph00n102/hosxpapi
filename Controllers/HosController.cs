@@ -8,6 +8,8 @@ using System.Security.Cryptography;
 using Microsoft.VisualBasic;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
+using System.Globalization;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 
 namespace HosApi.Controllers;
@@ -202,12 +204,51 @@ namespace HosApi.Controllers;
 
         // เพิ่ม vn ในตาราง ovst
         [HttpPost]
-        public IActionResult OpenVisit(Ovst _data)
+        public IActionResult OpenVisit(ClientDto clientDto)
         {
-            db.Ovsts.Add(_data);
+            var otherClient = db.Ovsts.FirstOrDefault(c => c.HosGuid == clientDto.hosGuid);
+            if (otherClient != null)
+            {
+                ModelState.AddModelError("HosGuid", "The HosGuid is already used");
+                var validation = new ValidationProblemDetails(ModelState);
+                return BadRequest(validation);
+            }
+
+            var client = new Ovst
+            {
+                HosGuid = "{"+Guid.NewGuid().ToString()+"}",
+                Vn = DateTime.Now.ToString("yyMMddHHmmss", new CultureInfo("th-TH")),
+                Hn = clientDto.hn,
+                Doctor = clientDto.doctor,
+                Hospmain = clientDto.hospmain,
+                Hospsub = clientDto.hospsub,
+                Oqueue = 0,
+                Ovstist = clientDto.ovstist,
+                Ovstost = clientDto.ovstost,
+                Pttype = clientDto.pttype,
+                Pttypeno = clientDto.pttypeno,
+                Rfrocs = clientDto.rfrocs,
+                Spclty = clientDto.spclty,
+                Hcode = clientDto.hcode,
+                CurDep = clientDto.curDep,
+                CurDepBusy = clientDto.curDepBusy,
+                LastDep = clientDto.lastDep,
+                PtSubtype = 0,
+                MainDep = clientDto.mainDep,
+                MainDepQueue = 0,
+                VisitType = clientDto.visitType,
+                NodeId = clientDto.nodeId,
+                Waiting = clientDto.waiting,
+                HasInsurance = clientDto.hasInsurance,
+                Staff = clientDto.staff,
+                PtPriority = 0,
+                OvstKey = "9564AB24894CF188CC14EB2D81857600",
+            };
+
+            db.Ovsts.Add(client);
             db.SaveChanges();
 
-            return Ok(_data);
+            return Ok(client);
         }
 
         
