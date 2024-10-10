@@ -38,13 +38,15 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Pttype> Pttypes { get; set; }
 
+    public virtual DbSet<Serial> Serials { get; set; }
+
     public virtual DbSet<Spclty> Spclties { get; set; }
 
     public virtual DbSet<Ward> Wards { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=172.16.5.39;port=3306;database=hos;userid=coachnrm;password=his_api_slave", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.1.37-mariadb"));
+        => optionsBuilder.UseMySql("server=172.16.5.39;port=3306;database=hos;userid=hks;password=\"Fi'rpk[k]@!#\"", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.1.37-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -2081,6 +2083,34 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.YearlyChargeIcode2)
                 .HasMaxLength(7)
                 .HasColumnName("yearly_charge_icode2");
+        });
+
+        modelBuilder.Entity<Serial>(entity =>
+        {
+            entity.HasKey(e => e.Name).HasName("PRIMARY");
+
+            entity.ToTable("serial");
+
+            entity.HasIndex(e => e.HosGuid, "ix_hos_guid");
+
+            entity.HasIndex(e => e.HosGuidExt, "ix_hos_guid_ext");
+
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .HasColumnName("name");
+            entity.Property(e => e.HosGuid)
+                .HasMaxLength(38)
+                .HasColumnName("hos_guid");
+            entity.Property(e => e.HosGuidExt)
+                .HasMaxLength(64)
+                .HasColumnName("hos_guid_ext");
+            entity.Property(e => e.NodeId)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("node_id");
+            entity.Property(e => e.SerialNo)
+                .HasColumnType("int(11)")
+                .HasColumnName("serial_no");
         });
 
         modelBuilder.Entity<Spclty>(entity =>
