@@ -18,9 +18,9 @@ namespace hosxpapi.Controllers
         }
 
         [HttpGet]
-        public IActionResult genqn()
+        public IActionResult genqn(string name)
         {
-            var name = "ovst-q-671010";
+            //var name = "ovst-q-630101";
             //DateOnly dateOnly = DateOnly.FromDateTime(DateTime.Now);
             //var name = "ovst-q-" + dateOnly.ToString("yyMMdd");
             var query =

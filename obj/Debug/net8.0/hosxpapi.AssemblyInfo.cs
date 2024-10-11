@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("hosxpapi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0cdd1438c5c1bef86df5baf8fb8618a3ca1a56a0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f4d0675c04cc7c50f4a55cf3a7b4a7f4938e436")]
 [assembly: System.Reflection.AssemblyProductAttribute("hosxpapi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("hosxpapi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
