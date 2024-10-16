@@ -1,3 +1,4 @@
+using hosxpapi.Models;
 using MySqlConnector;
 
 
@@ -19,8 +20,13 @@ namespace hosxpapi.Services
             using (var connection = new MySqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand("SELECT get_serialnumber('ovst-q-631010') AS oqueue", connection))
+                using (var command = new MySqlCommand("SELECT get_serialnumber(@name) AS oqueue", connection))
                 {
+                    // Create and add the MySqlParameter
+                    DateOnly dateOnly = DateOnly.FromDateTime(DateTime.Now);
+                    var name = "ovst-q-" + dateOnly.ToString("yyMMdd"); 
+                    command.Parameters.Add(new MySqlParameter("@name", MySqlDbType.String));
+                    command.Parameters["@name"].Value = name; // Assign a value to the parameter
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         if (await reader.ReadAsync())
