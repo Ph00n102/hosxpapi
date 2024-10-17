@@ -1,3 +1,4 @@
+using System.Globalization;
 using hosxpapi.Models;
 using MySqlConnector;
 
@@ -16,6 +17,7 @@ namespace hosxpapi.Services
         public async Task<string> GetSerialNumber()
         {
             string serialNumber = null;
+            //int number = 0;
 
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -32,6 +34,7 @@ namespace hosxpapi.Services
                         if (await reader.ReadAsync())
                         {
                             serialNumber = reader["oqueue"].ToString();
+                            //number = Convert.ToInt32(serialNumber);
                         }
                     }
                 }
@@ -39,6 +42,8 @@ namespace hosxpapi.Services
 
             return serialNumber;
         }  
+
+  
 
         public async Task<string> GetSerialNumberByParam(string param)
         {

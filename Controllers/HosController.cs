@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using hosxpapi.Services;
 
 
 namespace HosApi.Controllers;
@@ -18,9 +19,11 @@ namespace HosApi.Controllers;
     public class HosController : Controller
     {
         private readonly ApplicationDbContext db;
-        public HosController(ApplicationDbContext db)
+        private readonly GetSerial _service;
+        public HosController(ApplicationDbContext db, GetSerial service)
         {
             this.db = db;
+            _service = service;
         }
 
         // ค้นหาชื่อคนไข้ด้วย QN หรือ HN
