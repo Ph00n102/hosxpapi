@@ -539,4 +539,28 @@ namespace HosApi.Controllers;
                 };
                 return Ok(query.Take(60));
         }
+
+         [HttpGet]
+        public IActionResult genqn()
+        {
+            //var name = "ovst-q-630101";
+            // DateOnly dateOnly = DateOnly.FromDateTime(DateTime.Now);
+            // var name = "ovst-q-" + dateOnly.ToString("yyMMdd");
+            // var query =
+            //     from a in db.Serials where a.Name.Contains(""+name+"")
+            //     select new
+            //     {
+            //         a.Name, a.SerialNo
+            //     };
+            //     return Json(query.Take(1));
+
+            var sqlQuery = "select get_serialnumber('ovst-q-611010')";
+
+            var result = db.Serials
+                .FromSqlRaw(sqlQuery)
+                .Select(e => e.SerialNo)
+                .FirstOrDefaultAsync();
+            
+            return Ok(result);
+        }
     }
