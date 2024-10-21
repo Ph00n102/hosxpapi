@@ -386,6 +386,18 @@ namespace HosApi.Controllers;
                 return Json(query.Take(1));
         }
 
+         [HttpGet("{_HosGuid}")]
+        public IActionResult GetOvstByHg2 (string _HosGuid)
+        {
+            var query = db.Ovsts.Find(_HosGuid);
+            if (query == null)
+            {
+                return NotFound();
+            }
+                
+                return Ok(query);
+        }
+
         [HttpGet]
         public IActionResult GetDoctor()
         {
