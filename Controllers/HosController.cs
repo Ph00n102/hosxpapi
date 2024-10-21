@@ -209,13 +209,13 @@ namespace HosApi.Controllers;
         [HttpPost]
         public async Task<IActionResult> OpenVisit(ClientDto clientDto)
         {
-            var otherClient = db.Ovsts.FirstOrDefault(c => c.HosGuid == clientDto.hosGuid);
-            if (otherClient != null)
-            {
-                ModelState.AddModelError("HosGuid", "The HosGuid is already used");
-                var validation = new ValidationProblemDetails(ModelState);
-                return BadRequest(validation);
-            }
+            // var otherClient = db.Ovsts.FirstOrDefault(c => c.HosGuid == clientDto.hosGuid);
+            // if (otherClient != null)
+            // {
+            //     ModelState.AddModelError("HosGuid", "The HosGuid is already used");
+            //     var validation = new ValidationProblemDetails(ModelState);
+            //     return BadRequest(validation);
+            // }
 
             var _Oqueue = await _service.GetSerialNumber();
 
@@ -260,83 +260,153 @@ namespace HosApi.Controllers;
 
         
 
+        // [HttpPut("{_HosGuid}")]
+        // public async Task<IActionResult> UpdateOvst(string _HosGuid, [FromBody] Ovst ovst)
+        // {
+        //     if (_HosGuid != ovst.HosGuid)
+        //     {
+        //         return BadRequest();
+        //     }
+        //     var result = await db.Ovsts.FindAsync(_HosGuid);
+        //     if(result == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     result.HosGuid = ovst.HosGuid;
+        //     result.Vn = ovst.Vn;
+        //     result.Hn = ovst.Hn;
+        //     result.An = ovst.An;
+        //     result.Vstdate = DateOnly.FromDateTime(DateTime.Now);
+        //     result.Vsttime = TimeOnly.FromDateTime(DateTime.Now);
+        //     result.Doctor = ovst.Doctor;
+        //     result.Hospmain = ovst.Hospmain;
+        //     result.Hospsub = ovst.Hospsub;
+        //     result.Oqueue = ovst.Oqueue;
+        //     result.Ovstist = ovst.Ovstist;
+        //     result.Ovstost = ovst.Ovstost;
+        //     result.Pttype = ovst.Pttype;
+        //     result.Pttypeno = ovst.Pttypeno;
+        //     result.Rfrics = ovst.Rfrics;
+        //     result.Rfrilct = ovst.Rfrilct;
+        //     result.Rfrocs = ovst.Rfrocs;
+        //     result.Rfrolct = ovst.Rfrolct;
+        //     result.Spclty = ovst.Spclty;
+        //     result.RcptDisease = ovst.RcptDisease;
+        //     result.Hcode = "10734";
+        //     result.CurDep = ovst.CurDep;
+        //     result.CurDepBusy = "N";
+        //     result.LastDep = ovst.LastDep;
+        //     result.CurDepTime = ovst.CurDepTime;
+        //     result.RxQueue = ovst.RxQueue;
+        //     result.DiagText = ovst.DiagText;
+        //     result.PtSubtype = 0;
+        //     result.MainDep = ovst.MainDep;
+        //     result.MainDepQueue = 0;
+        //     result.FinanceSummaryDate = ovst.FinanceSummaryDate;
+        //     result.VisitType = ovst.VisitType;
+        //     result.NodeId = ovst.NodeId;
+        //     result.ContractId = ovst.ContractId;
+        //     result.Waiting = "Y";
+        //     result.RfriIcd10 = ovst.RfriIcd10;
+        //     result.OReferNumber = ovst.OReferNumber;
+        //     result.HasInsurance = ovst.HasInsurance;
+        //     result.IReferNumber = ovst.IReferNumber;
+        //     result.ReferType = ovst.ReferType;
+        //     result.OReferDep = ovst.OReferDep;
+        //     result.Staff = ovst.Staff;
+        //     result.CommandDoctor = ovst.CommandDoctor;
+        //     result.SendPerson = ovst.SendPerson;
+        //     result.PtPriority = ovst.PtPriority;
+        //     result.FinanceLock = ovst.FinanceLock;
+        //     result.FinanceAlient = ovst.FinanceAlient;
+        //     result.Oldcode = ovst.Oldcode;
+        //     result.SignDoctor = ovst.SignDoctor;
+        //     result.AnonymousVisit = ovst.AnonymousVisit;
+        //     result.AnonymousVn = ovst.AnonymousVn;
+        //     result.PtCapabilityTypeId = ovst.PtCapabilityTypeId;
+        //     result.AtHospital = ovst.AtHospital;
+        //     result.PtPriority = 0;
+        //     result.OvstKey = "9564AB24894CF188CC14EB2D81857600";
+        //     try
+        //     {
+        //         await db.SaveChangesAsync();
+        //     }
+        //     catch (DbUpdateConcurrencyException) when (!OvstExists(_HosGuid))
+        //     {
+        //         return NotFound();
+        //     }      
+
+        //     return NoContent();
+        // }
+
         [HttpPut("{_HosGuid}")]
-        public async Task<ActionResult> UpdateOvst(string _HosGuid, Ovst ovst)
+        public IActionResult UpdateOvst(string _HosGuid, [FromBody] ClientDto clientDto)
         {
-            if (_HosGuid != ovst.HosGuid)
-            {
-                return BadRequest();
-            }
-            var result = await db.Ovsts.FindAsync(_HosGuid);
+            var result = db.Ovsts.Find(_HosGuid);
             if(result == null)
             {
                 return NotFound();
             }
 
-            result.HosGuid = ovst.HosGuid;
-            result.Vn = ovst.Vn;
-            result.Hn = ovst.Hn;
-            result.An = ovst.An;
-            result.Vstdate = ovst.Vstdate;
-            result.Vsttime = ovst.Vsttime;
-            result.Doctor = ovst.Doctor;
-            result.Hospmain = ovst.Hospmain;
-            result.Hospsub = ovst.Hospsub;
-            result.Oqueue = ovst.Oqueue;
-            result.Ovstist = ovst.Ovstist;
-            result.Ovstost = ovst.Ovstost;
-            result.Pttype = ovst.Pttype;
-            result.Pttypeno = ovst.Pttypeno;
-            result.Rfrics = ovst.Rfrics;
-            result.Rfrilct = ovst.Rfrilct;
-            result.Rfrocs = ovst.Rfrocs;
-            result.Rfrolct = ovst.Rfrolct;
-            result.Spclty = ovst.Spclty;
-            result.RcptDisease = ovst.RcptDisease;
-            result.Hcode = ovst.Hcode;
-            result.CurDep = ovst.CurDep;
-            result.CurDepBusy = ovst.CurDepBusy;
-            result.LastDep = ovst.LastDep;
-            result.CurDepTime = ovst.CurDepTime;
-            result.RxQueue = ovst.RxQueue;
-            result.DiagText = ovst.DiagText;
-            result.PtSubtype = ovst.PtSubtype;
-            result.MainDep = ovst.MainDep;
-            result.MainDepQueue = ovst.MainDepQueue;
-            result.FinanceSummaryDate = ovst.FinanceSummaryDate;
-            result.VisitType = ovst.VisitType;
-            result.NodeId = ovst.NodeId;
-            result.ContractId = ovst.ContractId;
-            result.Waiting = ovst.Waiting;
-            result.RfriIcd10 = ovst.RfriIcd10;
-            result.OReferNumber = ovst.OReferNumber;
-            result.HasInsurance = ovst.HasInsurance;
-            result.IReferNumber = ovst.IReferNumber;
-            result.ReferType = ovst.ReferType;
-            result.OReferDep = ovst.OReferDep;
-            result.Staff = ovst.Staff;
-            result.CommandDoctor = ovst.CommandDoctor;
-            result.SendPerson = ovst.SendPerson;
-            result.PtPriority = ovst.PtPriority;
-            result.FinanceLock = ovst.FinanceLock;
-            result.FinanceAlient = ovst.FinanceAlient;
-            result.Oldcode = ovst.Oldcode;
-            result.SignDoctor = ovst.SignDoctor;
-            result.AnonymousVisit = ovst.AnonymousVisit;
-            result.AnonymousVn = ovst.AnonymousVn;
-            result.PtCapabilityTypeId = ovst.PtCapabilityTypeId;
-            result.AtHospital = ovst.AtHospital;
-            result.OvstKey = ovst.OvstKey;
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException) when (!OvstExists(_HosGuid))
-            {
-                return NotFound();
-            }      
+            result.Vn = clientDto.vn;
+            result.Hn = clientDto.hn;
+            result.An = null;
+            result.Vstdate = DateOnly.FromDateTime(DateTime.Now);
+            result.Vsttime = TimeOnly.FromDateTime(DateTime.Now);
+            result.Doctor = clientDto.doctor;
+            result.Hospmain = clientDto.hospmain;
+            result.Hospsub = clientDto.hospsub;
+            result.Oqueue = clientDto.oqueue;
+            result.Ovstist = clientDto.ovstist;
+            result.Ovstost = clientDto.ovstost;
+            result.Pttype = clientDto.pttype;
+            result.Pttypeno = clientDto.pttypeno;
+            result.Rfrics = null;
+            result.Rfrilct = null;
+            result.Rfrocs = clientDto.rfrocs;
+            result.Rfrolct = clientDto.rfrolct;
+            result.Spclty = clientDto.spclty;
+            result.RcptDisease = null;
+            result.Hcode = "10734";
+            result.CurDep = clientDto.curDep;
+            result.CurDepBusy = "N";
+            result.LastDep = clientDto.lastDep;
+            result.CurDepTime = null;
+            result.RxQueue = null;
+            result.DiagText = null;
+            result.PtSubtype = 0;
+            result.MainDep = clientDto.mainDep;
+            result.MainDepQueue = 0;
+            result.FinanceSummaryDate = null;
+            result.VisitType = clientDto.visitType;
+            result.NodeId = clientDto.nodeId;
+            result.ContractId = null;
+            result.Waiting = "Y";
+            result.RfriIcd10 = null;
+            result.OReferNumber = null;
+            result.HasInsurance = null;
+            result.IReferNumber = null;
+            result.ReferType = null;
+            result.OReferDep = null;
+            result.Staff = clientDto.staff;
+            result.CommandDoctor = null;
+            result.SendPerson = null;
+            result.PtPriority = clientDto.ptPriority;
+            result.FinanceLock = null;
+            result.FinanceAlient = null;
+            result.Oldcode = null;
+            result.SignDoctor = null;
+            result.AnonymousVisit = null;
+            result.AnonymousVn = null;
+            result.PtCapabilityTypeId = null;
+            result.AtHospital = null;
+            result.PtPriority = 0;
+            result.OvstKey = "9564AB24894CF188CC14EB2D81857600";
+              
+            db.SaveChanges();
 
-            return NoContent();
+            return Ok(result);
         }
 
 
