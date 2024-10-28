@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using hosxpapi.Services;
 
 
 namespace HosApi.Controllers;
@@ -18,9 +19,11 @@ namespace HosApi.Controllers;
     public class HosController : Controller
     {
         private readonly ApplicationDbContext db;
-        public HosController(ApplicationDbContext db)
+        private readonly GetSerial _service;
+        public HosController(ApplicationDbContext db, GetSerial service)
         {
             this.db = db;
+            _service = service;
         }
 
         // ค้นหาชื่อคนไข้ด้วย QN หรือ HN
@@ -204,7 +207,7 @@ namespace HosApi.Controllers;
 
         // เพิ่ม vn ในตาราง ovst
         [HttpPost]
-        public IActionResult OpenVisit(ClientDto clientDto)
+        public async Task<IActionResult> OpenVisit(ClientDto clientDto)
         {
             var otherClient = db.Ovsts.FirstOrDefault(c => c.HosGuid == clientDto.hosGuid);
             if (otherClient != null)
@@ -214,31 +217,35 @@ namespace HosApi.Controllers;
                 return BadRequest(validation);
             }
 
+            var _Oqueue = await _service.GetSerialNumber();
+
             var client = new Ovst
             {
                 HosGuid = "{"+Guid.NewGuid().ToString()+"}",
                 Vn = DateTime.Now.ToString("yyMMddHHmmss", new CultureInfo("th-TH")),
                 Hn = clientDto.hn,
+                Vstdate = DateOnly.FromDateTime(DateTime.Now),
+                Vsttime = TimeOnly.FromDateTime(DateTime.Now),
                 Doctor = clientDto.doctor,
                 Hospmain = clientDto.hospmain,
                 Hospsub = clientDto.hospsub,
-                Oqueue = 0,
+                Oqueue = Convert.ToInt32(_Oqueue),
                 Ovstist = clientDto.ovstist,
                 Ovstost = clientDto.ovstost,
                 Pttype = clientDto.pttype,
                 Pttypeno = clientDto.pttypeno,
                 Rfrocs = clientDto.rfrocs,
                 Spclty = clientDto.spclty,
-                Hcode = clientDto.hcode,
+                Hcode = "10734",
                 CurDep = clientDto.curDep,
-                CurDepBusy = clientDto.curDepBusy,
+                CurDepBusy = "N",
                 LastDep = clientDto.lastDep,
                 PtSubtype = 0,
                 MainDep = clientDto.mainDep,
                 MainDepQueue = 0,
                 VisitType = clientDto.visitType,
                 NodeId = clientDto.nodeId,
-                Waiting = clientDto.waiting,
+                Waiting = "Y",
                 HasInsurance = clientDto.hasInsurance,
                 Staff = clientDto.staff,
                 PtPriority = 0,
@@ -379,6 +386,19 @@ namespace HosApi.Controllers;
                 return Json(query.Take(1));
         }
 
+         [HttpGet("{_HosGuid}")]
+        public IActionResult GetOvstByHg2 (string _HosGuid)
+        {
+            var query = db.Ovsts.Find(_HosGuid);
+            if (query == null)
+            {
+                return NotFound();
+            }
+                
+                return Ok(query);
+        }
+
+        // get รายชื่อหมอ
         [HttpGet]
         public IActionResult GetDoctor()
         {

@@ -1,3 +1,4 @@
+using System.Globalization;
 using hosxpapi.Models;
 using MySqlConnector;
 
@@ -39,6 +40,8 @@ namespace hosxpapi.Services
 
             return serialNumber;
         }  
+
+  
 
         public async Task<string> GetSerialNumberByParam(string param)
         {
