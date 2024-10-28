@@ -16,6 +16,8 @@ public partial class ApplicationDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Clinic> Clinics { get; set; }
+
     public virtual DbSet<Doctor> Doctors { get; set; }
 
     public virtual DbSet<Hospcode> Hospcodes { get; set; }
@@ -25,6 +27,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<LabHead> LabHeads { get; set; }
 
     public virtual DbSet<LabOrder> LabOrders { get; set; }
+
+    public virtual DbSet<Oapp> Oapps { get; set; }
 
     public virtual DbSet<Opduser> Opdusers { get; set; }
 
@@ -53,6 +57,128 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder
             .UseCollation("tis620_thai_ci")
             .HasCharSet("tis620");
+
+        modelBuilder.Entity<Clinic>(entity =>
+        {
+            entity.HasKey(e => e.Clinic1).HasName("PRIMARY");
+
+            entity.ToTable("clinic");
+
+            entity.HasIndex(e => e.ClinicGuid, "ix_clinic_guid");
+
+            entity.HasIndex(e => e.Name, "ix_name");
+
+            entity.HasIndex(e => e.SssClinicCode, "ix_sss_clinic_code");
+
+            entity.Property(e => e.Clinic1)
+                .HasMaxLength(3)
+                .IsFixedLength()
+                .HasColumnName("clinic");
+            entity.Property(e => e.ActiveStatus)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("active_status");
+            entity.Property(e => e.AppLimitQty)
+                .HasColumnType("int(11)")
+                .HasColumnName("app_limit_qty");
+            entity.Property(e => e.Chronic)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("chronic");
+            entity.Property(e => e.ClinicGuid)
+                .HasMaxLength(38)
+                .HasColumnName("clinic_guid");
+            entity.Property(e => e.CloseTime)
+                .HasColumnType("time")
+                .HasColumnName("close_time");
+            entity.Property(e => e.Depcode)
+                .HasMaxLength(3)
+                .HasColumnName("depcode");
+            entity.Property(e => e.DisableDialog)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("disable_dialog");
+            entity.Property(e => e.HosGuid)
+                .HasMaxLength(38)
+                .HasColumnName("hos_guid");
+            entity.Property(e => e.HosxpClinicTypeId)
+                .HasColumnType("int(11)")
+                .HasColumnName("hosxp_clinic_type_id");
+            entity.Property(e => e.Icd10)
+                .HasMaxLength(6)
+                .HasColumnName("icd10");
+            entity.Property(e => e.KioskOpdQsRoomId)
+                .HasColumnType("int(11)")
+                .HasColumnName("kiosk_opd_qs_room_id");
+            entity.Property(e => e.Labparam)
+                .HasMaxLength(10)
+                .HasColumnName("labparam");
+            entity.Property(e => e.LimitAccess)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("limit_access");
+            entity.Property(e => e.Location)
+                .HasMaxLength(200)
+                .HasColumnName("location");
+            entity.Property(e => e.MophVaccineNcdId)
+                .HasColumnType("int(11)")
+                .HasColumnName("moph_vaccine_ncd_id");
+            entity.Property(e => e.Name)
+                .HasMaxLength(150)
+                .HasColumnName("name");
+            entity.Property(e => e.NoExport)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("no_export");
+            entity.Property(e => e.OappActivityId)
+                .HasMaxLength(5)
+                .HasColumnName("oapp_activity_id");
+            entity.Property(e => e.Oldcode)
+                .HasMaxLength(20)
+                .HasColumnName("oldcode");
+            entity.Property(e => e.OnlineNcdKey)
+                .HasMaxLength(50)
+                .HasColumnName("online_ncd_key");
+            entity.Property(e => e.OnlineNcdSegmentId)
+                .HasMaxLength(50)
+                .HasColumnName("online_ncd_segment_id");
+            entity.Property(e => e.OnlineRegisterTypeId)
+                .HasColumnType("int(11)")
+                .HasColumnName("online_register_type_id");
+            entity.Property(e => e.OpdKiosDepMenuId)
+                .HasColumnType("int(11)")
+                .HasColumnName("opd_kios_dep_menu_id");
+            entity.Property(e => e.OpdQsScheduleTmplTypeId)
+                .HasColumnType("int(11)")
+                .HasColumnName("opd_qs_schedule_tmpl_type_id");
+            entity.Property(e => e.OpenTime)
+                .HasColumnType("time")
+                .HasColumnName("open_time");
+            entity.Property(e => e.PcuCode)
+                .HasColumnType("int(11)")
+                .HasColumnName("pcu_code");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(50)
+                .HasColumnName("phone");
+            entity.Property(e => e.PhrSkip)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("phr_skip");
+            entity.Property(e => e.QueuePrefix)
+                .HasMaxLength(5)
+                .HasColumnName("queue_prefix");
+            entity.Property(e => e.SkhOldName)
+                .HasMaxLength(150)
+                .HasColumnName("skh_old_name");
+            entity.Property(e => e.SssClinicCode)
+                .HasMaxLength(3)
+                .IsFixedLength()
+                .HasColumnName("sss_clinic_code");
+            entity.Property(e => e.UseAppQsSlot)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("use_app_qs_slot");
+        });
 
         modelBuilder.Entity<Doctor>(entity =>
         {
@@ -341,8 +467,7 @@ public partial class ApplicationDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("hosptype");
             entity.Property(e => e.Moopart)
-                .HasMaxLength(2)
-                .IsFixedLength()
+                .HasMaxLength(3)
                 .HasColumnName("moopart");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
@@ -350,6 +475,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.PoCode)
                 .HasMaxLength(5)
                 .HasColumnName("po_code");
+            entity.Property(e => e.ProvinceName)
+                .HasMaxLength(60)
+                .HasColumnName("province_name");
             entity.Property(e => e.SssCode)
                 .HasMaxLength(12)
                 .HasColumnName("sss_code");
@@ -360,6 +488,9 @@ public partial class ApplicationDbContext : DbContext
                 .HasMaxLength(2)
                 .IsFixedLength()
                 .HasColumnName("tmbpart");
+            entity.Property(e => e.Zone)
+                .HasMaxLength(2)
+                .HasColumnName("zone");
         });
 
         modelBuilder.Entity<Kskdepartment>(entity =>
@@ -970,6 +1101,224 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnName("update_datetime");
         });
 
+        modelBuilder.Entity<Oapp>(entity =>
+        {
+            entity.HasKey(e => e.OappId).HasName("PRIMARY");
+
+            entity.ToTable("oapp");
+
+            entity.HasIndex(e => e.Clinic, "ix_clinic");
+
+            entity.HasIndex(e => e.Doctor, "ix_doctor");
+
+            entity.HasIndex(e => e.DoctorScheduleId, "ix_doctor_schedule_id");
+
+            entity.HasIndex(e => e.Hn, "ix_hn");
+
+            entity.HasIndex(e => e.Nextdate, "ix_nextdate");
+
+            entity.HasIndex(e => e.OappIdGuid, "ix_oapp_id_guid");
+
+            entity.HasIndex(e => e.OappRefId, "ix_oapp_ref_id");
+
+            entity.HasIndex(e => e.OpdQsSlotId, "ix_qs_slot_id");
+
+            entity.HasIndex(e => e.Spclty, "ix_spclty");
+
+            entity.HasIndex(e => new { e.Vstdate, e.Hn }, "ix_vh");
+
+            entity.HasIndex(e => e.VisitVn, "ix_visit_vn");
+
+            entity.HasIndex(e => new { e.VisitVn, e.VisitNo }, "ix_visit_vn_no");
+
+            entity.HasIndex(e => e.Vn, "ix_vn");
+
+            entity.HasIndex(e => new { e.Vn, e.ExtRefId }, "ix_vn_ext_ref_id");
+
+            entity.HasIndex(e => e.Vstdate, "ix_vstdate");
+
+            entity.Property(e => e.OappId)
+                .ValueGeneratedNever()
+                .HasColumnType("int(11)")
+                .HasColumnName("oapp_id");
+            entity.Property(e => e.An)
+                .HasMaxLength(9)
+                .IsFixedLength()
+                .HasColumnName("an");
+            entity.Property(e => e.AppCause)
+                .HasMaxLength(250)
+                .HasColumnName("app_cause");
+            entity.Property(e => e.AppLimitQty)
+                .HasColumnType("int(11)")
+                .HasColumnName("app_limit_qty");
+            entity.Property(e => e.AppNo)
+                .HasColumnType("tinyint(4)")
+                .HasColumnName("app_no");
+            entity.Property(e => e.AppUser)
+                .HasMaxLength(150)
+                .HasColumnName("app_user");
+            entity.Property(e => e.Clinic)
+                .HasMaxLength(3)
+                .IsFixedLength()
+                .HasColumnName("clinic");
+            entity.Property(e => e.ClinicVisitTypeId)
+                .HasColumnType("int(11)")
+                .HasColumnName("clinic_visit_type_id");
+            entity.Property(e => e.CloseTime)
+                .HasColumnType("time")
+                .HasColumnName("close_time");
+            entity.Property(e => e.ContactPoint)
+                .HasMaxLength(250)
+                .HasColumnName("contact_point");
+            entity.Property(e => e.DateCount)
+                .HasColumnType("int(11)")
+                .HasColumnName("date_count");
+            entity.Property(e => e.Depcode)
+                .HasMaxLength(3)
+                .IsFixedLength()
+                .HasColumnName("depcode");
+            entity.Property(e => e.Doctor)
+                .HasMaxLength(15)
+                .HasColumnName("doctor");
+            entity.Property(e => e.DoctorScheduleId)
+                .HasColumnType("int(11)")
+                .HasColumnName("doctor_schedule_id");
+            entity.Property(e => e.Enddate).HasColumnName("enddate");
+            entity.Property(e => e.Endtime)
+                .HasColumnType("time")
+                .HasColumnName("endtime");
+            entity.Property(e => e.EntryDate).HasColumnName("entry_date");
+            entity.Property(e => e.EntryTime)
+                .HasColumnType("time")
+                .HasColumnName("entry_time");
+            entity.Property(e => e.ExtRefId)
+                .HasColumnType("int(11)")
+                .HasColumnName("ext_ref_id");
+            entity.Property(e => e.Hn)
+                .HasMaxLength(9)
+                .HasColumnName("hn");
+            entity.Property(e => e.HosGuid)
+                .HasMaxLength(38)
+                .HasColumnName("hos_guid");
+            entity.Property(e => e.IsRefill)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("is_refill");
+            entity.Property(e => e.LabListText)
+                .HasColumnType("text")
+                .HasColumnName("lab_list_text");
+            entity.Property(e => e.LabelColor)
+                .HasColumnType("int(11)")
+                .HasColumnName("label_color");
+            entity.Property(e => e.MophIcRefId)
+                .HasColumnType("int(11)")
+                .HasColumnName("moph_ic_ref_id");
+            entity.Property(e => e.NextPttype)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("next_pttype");
+            entity.Property(e => e.Nextdate).HasColumnName("nextdate");
+            entity.Property(e => e.Nexttime)
+                .HasColumnType("time")
+                .HasColumnName("nexttime");
+            entity.Property(e => e.NexttimeEnd)
+                .HasColumnType("time")
+                .HasColumnName("nexttime_end");
+            entity.Property(e => e.Note)
+                .HasMaxLength(200)
+                .HasColumnName("note");
+            entity.Property(e => e.Note1)
+                .HasColumnType("text")
+                .HasColumnName("note1");
+            entity.Property(e => e.Note2)
+                .HasColumnType("text")
+                .HasColumnName("note2");
+            entity.Property(e => e.OappIdGuid)
+                .HasMaxLength(38)
+                .HasColumnName("oapp_id_guid");
+            entity.Property(e => e.OappRefId)
+                .HasColumnType("int(11)")
+                .HasColumnName("oapp_ref_id");
+            entity.Property(e => e.OappStatusId)
+                .HasColumnType("int(11)")
+                .HasColumnName("oapp_status_id");
+            entity.Property(e => e.OappWeekRangeLimitId)
+                .HasColumnType("int(11)")
+                .HasColumnName("oapp_week_range_limit_id");
+            entity.Property(e => e.OpdQsSlotId)
+                .HasColumnType("int(11)")
+                .HasColumnName("opd_qs_slot_id");
+            entity.Property(e => e.OpdQueueScheduleId)
+                .HasColumnType("int(11)")
+                .HasColumnName("opd_queue_schedule_id");
+            entity.Property(e => e.OpdQueueSlotId)
+                .HasColumnType("int(11)")
+                .HasColumnName("opd_queue_slot_id");
+            entity.Property(e => e.OpenTime)
+                .HasColumnType("time")
+                .HasColumnName("open_time");
+            entity.Property(e => e.OperationAnesType)
+                .HasMaxLength(15)
+                .HasColumnName("operation_anes_type");
+            entity.Property(e => e.OperationAppointment)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("operation_appointment");
+            entity.Property(e => e.OperationDoctorCode)
+                .HasMaxLength(25)
+                .HasColumnName("operation_doctor_code");
+            entity.Property(e => e.OperationNote)
+                .HasMaxLength(200)
+                .HasColumnName("operation_note");
+            entity.Property(e => e.OperationPatientType)
+                .HasMaxLength(3)
+                .IsFixedLength()
+                .HasColumnName("operation_patient_type");
+            entity.Property(e => e.PatientVisit)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("patient_visit");
+            entity.Property(e => e.PerformText)
+                .HasColumnType("text")
+                .HasColumnName("perform_text");
+            entity.Property(e => e.PersonVaccineId)
+                .HasColumnType("int(11)")
+                .HasColumnName("person_vaccine_id");
+            entity.Property(e => e.PrintSticker)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("print_sticker");
+            entity.Property(e => e.ProvisAptypeCode)
+                .HasMaxLength(5)
+                .HasColumnName("provis_aptype_code");
+            entity.Property(e => e.ReferinVn)
+                .HasMaxLength(12)
+                .HasColumnName("referin_vn");
+            entity.Property(e => e.Spclty)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("spclty");
+            entity.Property(e => e.UpdateDatetime)
+                .HasColumnType("datetime")
+                .HasColumnName("update_datetime");
+            entity.Property(e => e.VisitNo)
+                .HasColumnType("int(11)")
+                .HasColumnName("visit_no");
+            entity.Property(e => e.VisitVn)
+                .HasMaxLength(13)
+                .HasColumnName("visit_vn");
+            entity.Property(e => e.Vn)
+                .HasMaxLength(13)
+                .HasColumnName("vn");
+            entity.Property(e => e.Vstdate).HasColumnName("vstdate");
+            entity.Property(e => e.Ward)
+                .HasMaxLength(4)
+                .HasColumnName("ward");
+            entity.Property(e => e.XrayListText)
+                .HasColumnType("text")
+                .HasColumnName("xray_list_text");
+        });
+
         modelBuilder.Entity<Opduser>(entity =>
         {
             entity.HasKey(e => e.Loginname).HasName("PRIMARY");
@@ -1094,6 +1443,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.PasswordRecheckDate)
                 .HasColumnType("int(11)")
                 .HasColumnName("password_recheck_date");
+            entity.Property(e => e.PasswordText)
+                .HasMaxLength(32)
+                .HasColumnName("password_text");
             entity.Property(e => e.PcuUser)
                 .HasMaxLength(1)
                 .IsFixedLength()
@@ -1783,6 +2135,9 @@ public partial class ApplicationDbContext : DbContext
                 .HasMaxLength(1)
                 .IsFixedLength()
                 .HasColumnName("type_area");
+            entity.Property(e => e.Vid)
+                .HasMaxLength(8)
+                .HasColumnName("vid");
             entity.Property(e => e.WorkAddr1)
                 .HasMaxLength(230)
                 .HasColumnName("work_addr");
@@ -1902,7 +2257,6 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnName("fee_code_paidst");
             entity.Property(e => e.FinanceRoundMoney)
                 .HasMaxLength(1)
-                .IsFixedLength()
                 .HasColumnName("finance_round_money");
             entity.Property(e => e.GrouperRelease)
                 .HasMaxLength(5)
@@ -1929,7 +2283,6 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnName("in_region");
             entity.Property(e => e.IncRoundMoney)
                 .HasMaxLength(1)
-                .IsFixedLength()
                 .HasColumnName("inc_round_money");
             entity.Property(e => e.IpdBedcharge24)
                 .HasMaxLength(1)
@@ -1994,6 +2347,9 @@ public partial class ApplicationDbContext : DbContext
                 .HasMaxLength(1)
                 .IsFixedLength()
                 .HasColumnName("print_presc_ned");
+            entity.Property(e => e.PttypeEclaimId)
+                .HasMaxLength(2)
+                .HasColumnName("pttype_eclaim_id");
             entity.Property(e => e.PttypeGroup1)
                 .HasMaxLength(3)
                 .IsFixedLength()
@@ -2038,7 +2394,6 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnName("requirecode");
             entity.Property(e => e.RoundMoney)
                 .HasMaxLength(1)
-                .IsFixedLength()
                 .HasColumnName("round_money");
             entity.Property(e => e.RxPayDebitTr)
                 .HasMaxLength(1)

@@ -2,7 +2,6 @@ namespace hosxpapi.Models
 {
     public class ClientDto
     {
-        public string hosGuid { get; set; }
         public string vn { get; set; }
         public string hn { get; set; }
         public object an { get; set; }
