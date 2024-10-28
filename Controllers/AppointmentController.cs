@@ -39,7 +39,7 @@ namespace hosxpapi.Controllers;
                 join p2 in db.Pttypes on p.Pttype equals p2.Pttype1
                 join c in db.Clinics on o.Clinic equals c.Clinic1
                 join s in db.Spclties on o.Spclty equals s.Spclty1
-                //where p.Cid == "3740100376213"
+                
                 where p.Cid == _number || o.Hn == _number
                 group new { o, p, d, k, v, p2 } by new
                 {
@@ -60,9 +60,11 @@ namespace hosxpapi.Controllers;
                     p.Pname,p.Fname,p.Lname,
                     p.Pttype,
                     Pttname = p2.Name,
+                    o.AppCause,
                     o.Note,
                     o.Note1,
                     o.Note2,
+                    o.LabListText,
                     p.Hometel,
                     p.Informtel
                 } into grouped
@@ -87,9 +89,11 @@ namespace hosxpapi.Controllers;
                     grouped.Key.Lname,
                     grouped.Key.Pttype,
                     grouped.Key.Pttname,
+                    grouped.Key.AppCause,
                     grouped.Key.Note,
                     grouped.Key.Note1,
                     grouped.Key.Note2,
+                    grouped.Key.LabListText,
                     grouped.Key.Hometel,
                     grouped.Key.Informtel,
                 };
@@ -98,15 +102,15 @@ namespace hosxpapi.Controllers;
             return Json(query.Take(50).OrderByDescending(x => x.Nextdate));
         }
 
-        // [HttpGet("{_HosGuid}")]
-        // public IActionResult GetOvstByHg2 (string _HosGuid)
-        // {
-        //     var query = db.Ovsts.Find(_HosGuid);
-        //     if (query == null)
-        //     {
-        //         return NotFound();
-        //     }
+        [HttpGet()]
+        public IActionResult CheckAppointment (int _OappId)
+        {
+            var query = db.Oapps.Find(_OappId);
+            if (query == null)
+            {
+                return NotFound();
+            }
                 
-        //         return Ok(query);
-        // }
+                return Ok(query);
+        }
     }
