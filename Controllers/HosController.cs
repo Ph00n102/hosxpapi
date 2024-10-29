@@ -468,6 +468,7 @@ namespace HosApi.Controllers;
                 return Ok(query);
         }
 
+        // get รายชื่อหมอ
         [HttpGet]
         public IActionResult GetDoctor()
         {
