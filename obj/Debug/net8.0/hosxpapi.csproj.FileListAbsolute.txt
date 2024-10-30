@@ -312,9 +312,9 @@ D:\hosxpapi\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.hosxpap
 D:\hosxpapi\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.hosxpapi.props
 D:\hosxpapi\obj\Debug\net8.0\staticwebassets.pack.json
 D:\hosxpapi\obj\Debug\net8.0\scopedcss\bundle\hosxpapi.styles.css
-D:\hosxpapi\obj\Debug\net8.0\hosxpapi.csproj.CopyComplete
 D:\hosxpapi\obj\Debug\net8.0\hosxpapi.dll
 D:\hosxpapi\obj\Debug\net8.0\refint\hosxpapi.dll
 D:\hosxpapi\obj\Debug\net8.0\hosxpapi.pdb
 D:\hosxpapi\obj\Debug\net8.0\hosxpapi.genruntimeconfig.cache
 D:\hosxpapi\obj\Debug\net8.0\ref\hosxpapi.dll
+D:\hosxpapi\obj\Debug\net8.0\hosxpapi.csproj.Up2Date
