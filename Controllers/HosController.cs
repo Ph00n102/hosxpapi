@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using System.Net.NetworkInformation;
 
-namespace HosApi.Controllers;
+namespace hosxpapi.Controllers;
 
 [Route("/api/[controller]/[action]")]
     public class HosController : Controller
@@ -325,4 +325,38 @@ namespace HosApi.Controllers;
 
             return Ok(macAddresses);
         }
+
+        // [HttpGet]
+        // public IActionResult getUser (string uname,string para)
+        
+        // { 
+        //    var x = MD5Hash(para);
+
+        //     return Json((from a in db.Opdusers
+        //                  where a.Loginname == uname && a.Passweb == x 
+
+        //                  select new
+        //                  {
+        //                      a.Loginname,
+        //                      a.Passweb,
+        //                      a.Cid,
+                            
+
+        //                  }).FirstOrDefault());
+        // }
+
+        // public static string MD5Hash(string input)
+        // {
+        // StringBuilder hash = new StringBuilder();
+        // MD5CryptoServiceProvider md5provider = new MD5CryptoServiceProvider();
+        // byte[] bytes = md5provider.ComputeHash(new UTF8Encoding().GetBytes(input));
+
+        // for (int i = 0; i < bytes.Length; i++)
+        // {
+        //     hash.Append(bytes[i].ToString("x2"));
+        // }
+        // return hash.ToString();
+        // }
+
     }
+

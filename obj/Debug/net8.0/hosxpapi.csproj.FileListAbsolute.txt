@@ -105,6 +105,7 @@ C:\hosxpapi\obj\Debug\net8.0\hosxpapi.pdb
 C:\hosxpapi\obj\Debug\net8.0\hosxpapi.genruntimeconfig.cache
 C:\hosxpapi\obj\Debug\net8.0\ref\hosxpapi.dll
 C:\hosxpapi\obj\Debug\net8.0\hosxpapi.sourcelink.json
+<<<<<<< HEAD
 D:\hosxpapi\obj\Debug\net8.0\hosxpapi.csproj.AssemblyReference.cache
 D:\hosxpapi\obj\Debug\net8.0\hosxpapi.GeneratedMSBuildEditorConfig.editorconfig
 D:\hosxpapi\obj\Debug\net8.0\hosxpapi.AssemblyInfoInputs.cache
@@ -116,6 +117,8 @@ D:\hosxpapi\obj\Debug\net8.0\hosxpapi.sourcelink.json
 D:\hosxpapi\obj\Debug\net8.0\hosxpapi.dll
 D:\hosxpapi\obj\Debug\net8.0\refint\hosxpapi.dll
 D:\hosxpapi\obj\Debug\net8.0\hosxpapi.pdb
+=======
+>>>>>>> 516f1a289eaa815d5543180d964349499e89a1d8
 D:\hosxpapi\bin\Debug\net8.0\appsettings.Development.json
 D:\hosxpapi\bin\Debug\net8.0\appsettings.json
 D:\hosxpapi\bin\Debug\net8.0\hosxpapi.exe
