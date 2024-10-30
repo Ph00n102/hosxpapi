@@ -34,7 +34,7 @@ namespace hosxpapi.Controllers
                 join c in db.AnStats on a.An equals c.An
                 join d in db.PatientImages on a.Hn equals d.Hn
                 join e in db.Iptadms on a.An equals e.An
-                where a.Ward == _wardno && b.Admit == "Y"
+                where a.Ward == _wardno && b.Admit == "Y" && a.Dchdate == null
                 select new
                 {
                     a.Ward, e.Bedno, e.Indate, a.An, a.Vn, b.Pname, b.Fname, b.Lname, c.AgeY, d.Image

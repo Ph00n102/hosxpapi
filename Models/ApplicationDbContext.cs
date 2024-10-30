@@ -24,6 +24,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Hospcode> Hospcodes { get; set; }
 
+    public virtual DbSet<Icd101> Icd101s { get; set; }
+
     public virtual DbSet<Ipt> Ipts { get; set; }
 
     public virtual DbSet<Iptadm> Iptadms { get; set; }
@@ -53,6 +55,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Serial> Serials { get; set; }
 
     public virtual DbSet<Spclty> Spclties { get; set; }
+
+    public virtual DbSet<VnStat> VnStats { get; set; }
 
     public virtual DbSet<Ward> Wards { get; set; }
 
@@ -803,6 +807,80 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Zone)
                 .HasMaxLength(2)
                 .HasColumnName("zone");
+        });
+
+        modelBuilder.Entity<Icd101>(entity =>
+        {
+            entity.HasKey(e => e.Code).HasName("PRIMARY");
+
+            entity.ToTable("icd101");
+
+            entity.HasIndex(e => e.Code3, "code3");
+
+            entity.HasIndex(e => e.Code4, "code4");
+
+            entity.HasIndex(e => e.Code5, "code5");
+
+            entity.HasIndex(e => e.HosGuid, "ix_hos_guid");
+
+            entity.HasIndex(e => e.HosGuidExt, "ix_hos_guid_ext");
+
+            entity.HasIndex(e => e.Name, "name");
+
+            entity.Property(e => e.Code)
+                .HasMaxLength(7)
+                .HasColumnName("code");
+            entity.Property(e => e.ActiveStatus)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("active_status");
+            entity.Property(e => e.Code3)
+                .HasMaxLength(3)
+                .IsFixedLength()
+                .HasColumnName("code3");
+            entity.Property(e => e.Code4)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("code4");
+            entity.Property(e => e.Code5)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("code5");
+            entity.Property(e => e.Codeset)
+                .HasMaxLength(5)
+                .HasColumnName("codeset");
+            entity.Property(e => e.HosGuid)
+                .HasMaxLength(38)
+                .IsFixedLength()
+                .HasColumnName("hos_guid");
+            entity.Property(e => e.HosGuidExt)
+                .HasMaxLength(64)
+                .HasColumnName("hos_guid_ext");
+            entity.Property(e => e.Icd10compat)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("icd10compat");
+            entity.Property(e => e.Icd10tmcompat)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("icd10tmcompat");
+            entity.Property(e => e.IpdValid)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("ipd_valid");
+            entity.Property(e => e.Name)
+                .HasMaxLength(200)
+                .HasColumnName("name");
+            entity.Property(e => e.Sex)
+                .HasColumnType("int(11)")
+                .HasColumnName("sex");
+            entity.Property(e => e.Spclty)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("spclty");
+            entity.Property(e => e.Tname)
+                .HasMaxLength(150)
+                .HasColumnName("tname");
         });
 
         modelBuilder.Entity<Ipt>(entity =>
@@ -3357,6 +3435,307 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Spname)
                 .HasMaxLength(150)
                 .HasColumnName("spname");
+        });
+
+        modelBuilder.Entity<VnStat>(entity =>
+        {
+            entity.HasKey(e => e.Vn).HasName("PRIMARY");
+
+            entity.ToTable("vn_stat");
+
+            entity.HasIndex(e => e.Cid, "ix_cid");
+
+            entity.HasIndex(e => e.Hn, "ix_hn");
+
+            entity.HasIndex(e => e.HosGuid, "ix_hos_guid");
+
+            entity.HasIndex(e => e.Hospmain, "ix_hospmain");
+
+            entity.HasIndex(e => e.Hospsub, "ix_hospsub");
+
+            entity.HasIndex(e => e.Pcode, "ix_pcode");
+
+            entity.HasIndex(e => e.Pttype, "ix_pttype");
+
+            entity.HasIndex(e => e.Vstdate, "ix_vstdate");
+
+            entity.HasIndex(e => e.Ym, "ix_ym");
+
+            entity.Property(e => e.Vn)
+                .HasMaxLength(13)
+                .HasColumnName("vn");
+            entity.Property(e => e.AccidentCode)
+                .HasMaxLength(6)
+                .HasColumnName("accident_code");
+            entity.Property(e => e.AgeD)
+                .HasColumnType("smallint(6)")
+                .HasColumnName("age_d");
+            entity.Property(e => e.AgeM)
+                .HasColumnType("smallint(6)")
+                .HasColumnName("age_m");
+            entity.Property(e => e.AgeY)
+                .HasColumnType("smallint(6)")
+                .HasColumnName("age_y");
+            entity.Property(e => e.Aid)
+                .HasMaxLength(6)
+                .HasColumnName("aid");
+            entity.Property(e => e.ArTransferDatetimeSk)
+                .HasColumnType("datetime")
+                .HasColumnName("ar_transfer_datetime_sk");
+            entity.Property(e => e.ArTransferSk)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("ar_transfer_sk");
+            entity.Property(e => e.ArTransferStaffSk)
+                .HasMaxLength(25)
+                .HasColumnName("ar_transfer_staff_sk");
+            entity.Property(e => e.Cid)
+                .HasMaxLength(13)
+                .HasColumnName("cid");
+            entity.Property(e => e.CountInDay)
+                .HasColumnType("tinyint(4)")
+                .HasColumnName("count_in_day");
+            entity.Property(e => e.CountInMonth)
+                .HasColumnType("smallint(6)")
+                .HasColumnName("count_in_month");
+            entity.Property(e => e.CountInYear)
+                .HasColumnType("smallint(6)")
+                .HasColumnName("count_in_year");
+            entity.Property(e => e.Dba)
+                .HasColumnType("tinyint(4)")
+                .HasColumnName("dba");
+            entity.Property(e => e.DebtIdList)
+                .HasMaxLength(50)
+                .HasColumnName("debt_id_list");
+            entity.Property(e => e.DiscountMoney)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("discount_money");
+            entity.Property(e => e.Dx0)
+                .HasMaxLength(6)
+                .HasColumnName("dx0");
+            entity.Property(e => e.Dx1)
+                .HasMaxLength(6)
+                .HasColumnName("dx1");
+            entity.Property(e => e.Dx2)
+                .HasMaxLength(6)
+                .HasColumnName("dx2");
+            entity.Property(e => e.Dx3)
+                .HasMaxLength(6)
+                .HasColumnName("dx3");
+            entity.Property(e => e.Dx4)
+                .HasMaxLength(6)
+                .HasColumnName("dx4");
+            entity.Property(e => e.Dx5)
+                .HasMaxLength(6)
+                .HasColumnName("dx5");
+            entity.Property(e => e.DxDoctor)
+                .HasMaxLength(7)
+                .HasColumnName("dx_doctor");
+            entity.Property(e => e.Gr504)
+                .HasColumnType("smallint(6)")
+                .HasColumnName("gr504");
+            entity.Property(e => e.Hcode)
+                .HasMaxLength(5)
+                .HasColumnName("hcode");
+            entity.Property(e => e.Hn)
+                .HasMaxLength(9)
+                .HasColumnName("hn");
+            entity.Property(e => e.HosGuid)
+                .HasMaxLength(38)
+                .HasColumnName("hos_guid");
+            entity.Property(e => e.Hospmain)
+                .HasMaxLength(5)
+                .HasColumnName("hospmain");
+            entity.Property(e => e.Hospsub)
+                .HasMaxLength(5)
+                .HasColumnName("hospsub");
+            entity.Property(e => e.IllVisit)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("ill_visit");
+            entity.Property(e => e.Inc01)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc01");
+            entity.Property(e => e.Inc02)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc02");
+            entity.Property(e => e.Inc03)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc03");
+            entity.Property(e => e.Inc04)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc04");
+            entity.Property(e => e.Inc05)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc05");
+            entity.Property(e => e.Inc06)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc06");
+            entity.Property(e => e.Inc07)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc07");
+            entity.Property(e => e.Inc08)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc08");
+            entity.Property(e => e.Inc09)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc09");
+            entity.Property(e => e.Inc10)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc10");
+            entity.Property(e => e.Inc11)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc11");
+            entity.Property(e => e.Inc12)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc12");
+            entity.Property(e => e.Inc13)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc13");
+            entity.Property(e => e.Inc14)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc14");
+            entity.Property(e => e.Inc15)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc15");
+            entity.Property(e => e.Inc16)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc16");
+            entity.Property(e => e.Inc17)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc17");
+            entity.Property(e => e.IncDrug)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc_drug");
+            entity.Property(e => e.IncNondrug)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("inc_nondrug");
+            entity.Property(e => e.Income)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("income");
+            entity.Property(e => e.ItemMoney)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("item_money");
+            entity.Property(e => e.LabPaidOk)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("lab_paid_ok");
+            entity.Property(e => e.Lastvisit)
+                .HasColumnType("smallint(6)")
+                .HasColumnName("lastvisit");
+            entity.Property(e => e.LastvisitHour)
+                .HasColumnType("int(11)")
+                .HasColumnName("lastvisit_hour");
+            entity.Property(e => e.LastvisitVn)
+                .HasMaxLength(13)
+                .HasColumnName("lastvisit_vn");
+            entity.Property(e => e.MainPdx)
+                .HasMaxLength(3)
+                .IsFixedLength()
+                .HasColumnName("main_pdx");
+            entity.Property(e => e.Moopart)
+                .HasMaxLength(5)
+                .HasColumnName("moopart");
+            entity.Property(e => e.NodeId)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("node_id");
+            entity.Property(e => e.OldDiagnosis)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("old_diagnosis");
+            entity.Property(e => e.Op0)
+                .HasMaxLength(6)
+                .HasColumnName("op0");
+            entity.Property(e => e.Op1)
+                .HasMaxLength(6)
+                .HasColumnName("op1");
+            entity.Property(e => e.Op2)
+                .HasMaxLength(6)
+                .HasColumnName("op2");
+            entity.Property(e => e.Op3)
+                .HasMaxLength(6)
+                .HasColumnName("op3");
+            entity.Property(e => e.Op4)
+                .HasMaxLength(6)
+                .HasColumnName("op4");
+            entity.Property(e => e.Op5)
+                .HasMaxLength(6)
+                .HasColumnName("op5");
+            entity.Property(e => e.PaidMoney)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("paid_money");
+            entity.Property(e => e.Pcode)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("pcode");
+            entity.Property(e => e.Pdx)
+                .HasMaxLength(6)
+                .HasColumnName("pdx");
+            entity.Property(e => e.PrintCount)
+                .HasColumnType("tinyint(4)")
+                .HasColumnName("print_count");
+            entity.Property(e => e.PrintDone)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("print_done");
+            entity.Property(e => e.PtSubtype)
+                .HasColumnType("tinyint(4)")
+                .HasColumnName("pt_subtype");
+            entity.Property(e => e.Pttype)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("pttype");
+            entity.Property(e => e.PttypeBegin).HasColumnName("pttype_begin");
+            entity.Property(e => e.PttypeExpire).HasColumnName("pttype_expire");
+            entity.Property(e => e.PttypeInChwpart)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("pttype_in_chwpart");
+            entity.Property(e => e.PttypeInRegion)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("pttype_in_region");
+            entity.Property(e => e.Pttypeno)
+                .HasMaxLength(20)
+                .HasColumnName("pttypeno");
+            entity.Property(e => e.RcpNo)
+                .HasMaxLength(10)
+                .HasColumnName("rcp_no");
+            entity.Property(e => e.RcpnoList)
+                .HasMaxLength(100)
+                .HasColumnName("rcpno_list");
+            entity.Property(e => e.RcptMoney)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("rcpt_money");
+            entity.Property(e => e.RemainMoney)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("remain_money");
+            entity.Property(e => e.RxLicenseNo)
+                .HasMaxLength(15)
+                .HasColumnName("rx_license_no");
+            entity.Property(e => e.Sex)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("sex");
+            entity.Property(e => e.Spclty)
+                .HasMaxLength(2)
+                .IsFixedLength()
+                .HasColumnName("spclty");
+            entity.Property(e => e.UcMoney)
+                .HasColumnType("double(15,3)")
+                .HasColumnName("uc_money");
+            entity.Property(e => e.VnGuid)
+                .HasMaxLength(38)
+                .HasColumnName("vn_guid");
+            entity.Property(e => e.Vstdate).HasColumnName("vstdate");
+            entity.Property(e => e.XrayPaidOk)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("xray_paid_ok");
+            entity.Property(e => e.Ym)
+                .HasMaxLength(7)
+                .HasColumnName("ym");
         });
 
         modelBuilder.Entity<Ward>(entity =>
