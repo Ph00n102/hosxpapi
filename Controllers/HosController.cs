@@ -127,23 +127,43 @@ namespace HosApi.Controllers;
 
         // ค้นหาชื่อ user ใน hosxp ด้วย username, password ด้วยการ login
         [HttpPost]
+        // public IActionResult PostUser (string uname,string para)
+        // { 
+        //    var x = MD5Hash(para);
+        //    {
+        //         return Json((from a in db.Opdusers
+        //                  where a.Loginname == uname && a.Passweb == x 
+
+        //                  select new
+        //                  {
+        //                      a.Loginname,
+        //                      a.Passweb
+                            
+
+        //                  }).FirstOrDefault());
+        //    }
+        // }
+
         public IActionResult PostUser (string uname,string para)
         { 
            var x = MD5Hash(para);
-           {
-                return Json((from a in db.Opdusers
-                         where a.Loginname == uname && a.Passweb == x 
+    
+            var user = (from a in db.Opdusers
+                        where a.Loginname == uname && a.Passweb == x 
+                        select new
+                        {
+                            a.Loginname,
+                            a.Passweb
+                        }).FirstOrDefault();
 
-                         select new
-                         {
-                             a.Loginname,
-                             a.Passweb
-                            
+            if (user is null)
+            {
+                return Ok(new { Loginname = "no data", passweb = "no data"}); // Return 404 Not Found if user is not found
+            }
 
-                         }).FirstOrDefault());
-           }
-            
+            return Ok(user); // Return user data if found
         }
+    
 
         // เปลี่ยน password --> hash5 ก่อนใช้ login ข้างบน
         public static string MD5Hash(string input)
